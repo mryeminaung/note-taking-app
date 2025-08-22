@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="black">#FF000000</color>
+  <color name="white">#FFFFFFFF</color>
+  <color name="light_blue_600">#FF039BE5</color>
+  <color name="light_blue_900">#FF01579B</color>
+  <color name="light_blue_A200">#FF40C4FF</color>
+  <color name="light_blue_A400">#FF00B0FF</color>
+  <color name="black_overlay">#66000000</color>
+  <color name="sticky_yellow">#FFF9C4</color>
+  <color name="sticky_blue">#BBDEFB</color>
+  <color name="sticky_green">#C8E6C9</color>
+  <color name="sticky_orange">#FFE0B2</color>
+  <color name="sticky_pink">#F8BBD0</color>
+  <color name="sticky_lavender">#E1BEE7</color>
+
+  <!-- app main colors-->
+  <color name="very_dark_navy">#021024</color>
+  <color name="deep_blue">#052659</color>
+  <color name="muted_teal_blue">#548383</color>
+  <color name="soft_blue">#7DA0CA</color>
+  <color name="light_sky_blue">#C1E8FF</color>
+</resources>

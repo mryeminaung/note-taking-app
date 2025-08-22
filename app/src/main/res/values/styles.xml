@@ -1,0 +1,19 @@
+<resources>
+
+  <style name="Widget.Theme.NoteTakingapp.ButtonBar.Fullscreen" parent="">
+    <item name="android:background">@color/black_overlay</item>
+    <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+  </style>
+
+  <style name="BottomNavigationActiveText" parent="TextAppearance.MaterialComponents.Caption">
+    <item name="android:textSize">15sp</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:textColor">@color/light_blue_900</item>
+  </style>
+
+  <style name="BottomNavigationInactiveText" parent="TextAppearance.MaterialComponents.Caption">
+    <item name="android:textSize">15sp</item>
+    <item name="android:textStyle">normal</item>
+    <!--    <item name="android:textColor">@color/</item>-->
+  </style>
+</resources>

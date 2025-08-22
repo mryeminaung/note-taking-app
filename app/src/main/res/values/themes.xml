@@ -1,0 +1,14 @@
+<resources>
+  <!-- Base application theme. -->
+  <style name="Base.Theme.NoteTakingapp" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Customize your light theme here. -->
+    <!--    <item name="colorPrimary">@color/white</item>-->
+  </style>
+
+  <style name="Theme.NoteTakingapp" parent="Base.Theme.NoteTakingapp" />
+
+  <style name="ThemeOverlay.NoteTakingapp.FullscreenContainer" parent="">
+    <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+    <item name="fullscreenTextColor">@color/light_blue_A200</item>
+  </style>
+</resources>

@@ -6,21 +6,6 @@
   android:layout_height="match_parent"
   android:background="@drawable/splash_bg">
 
-  <!-- Back Button -->
-  <!--  <TextView-->
-  <!--    android:id="@+id/backBtn"-->
-  <!--    android:layout_width="wrap_content"-->
-  <!--    android:layout_height="wrap_content"-->
-  <!--    android:layout_marginStart="16dp"-->
-  <!--    android:layout_marginTop="30dp"-->
-  <!--    android:drawableStart="@drawable/ic_arrow_back"-->
-  <!--    android:drawablePadding="8dp"-->
-  <!--    android:text="Back"-->
-  <!--    android:textColor="@color/deep_blue"-->
-  <!--    android:textSize="16sp"-->
-  <!--    app:layout_constraintStart_toStartOf="parent"-->
-  <!--    app:layout_constraintTop_toTopOf="parent" />-->
-
   <ImageView
     android:layout_width="match_parent"
     android:layout_height="230dp"

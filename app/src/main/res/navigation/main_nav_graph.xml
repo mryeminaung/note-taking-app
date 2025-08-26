@@ -5,6 +5,7 @@
   android:id="@+id/main_nav_graph"
   app:startDestination="@id/notesFragment">
 
+  <!-- Notes Fragment: The starting point for the app -->
   <fragment
     android:id="@+id/notesFragment"
     android:name="com.example.notetakingapp.NotesFragment"
@@ -13,28 +14,30 @@
     <action
       android:id="@+id/action_notesFragment_to_settingsFragment"
       app:destination="@id/settingsFragment" />
+
     <action
       android:id="@+id/action_notesFragment_to_noteDetailFragment"
       app:destination="@id/noteDetailFragment" />
   </fragment>
+
+  <fragment
+    android:id="@+id/noteDetailFragment"
+    android:name="com.example.notetakingapp.NoteDetailFragment"
+    android:label="Note Detail">
+    <argument
+      android:name="noteId"
+      app:argType="integer" />
+  </fragment>
+
+  <!-- Settings Fragment -->
   <fragment
     android:id="@+id/settingsFragment"
     android:name="com.example.notetakingapp.SettingsFragment"
     android:label="SettingsFragment"
-    tools:layout="@layout/fragment_settings" />
-  <fragment
-    android:id="@+id/noteDetailFragment"
-    android:name="com.example.notetakingapp.NoteDetailFragment"
-    android:label="NoteDetailFragment"
-    tools:layout="@layout/fragment_note_detail">
-    <argument
-      android:name="title"
-      app:argType="string" />
-    <argument
-      android:name="body"
-      app:argType="string" />
-    <argument
-      android:name="bgColor"
-      app:argType="integer" />
+    tools:layout="@layout/fragment_settings">
+    <action
+      android:id="@+id/action_settingsFragment_to_notesFragment"
+      app:destination="@id/notesFragment" />
   </fragment>
+
 </navigation>

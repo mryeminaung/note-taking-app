@@ -1,14 +1,17 @@
-package com.example.notetakingapp
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notetakingapp.Note
 import com.example.notetakingapp.databinding.FragmentNoteCardBinding
 
-class NoteAdapter(
+class NotesAdapter(
     private val notes: List<Note>,
-    private val onNoteClick: (Note) -> Unit
-) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+    private val onEditClick: (Note) -> Unit = {},
+    private val onNoteClick: (Note) -> Unit = {}
+) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
+
+    inner class NoteViewHolder(val binding: FragmentNoteCardBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = FragmentNoteCardBinding.inflate(
@@ -20,20 +23,21 @@ class NoteAdapter(
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.bind(notes[position])
-    }
+        val note = notes[position]
 
-    override fun getItemCount(): Int = notes.size
+        holder.binding.apply {
+            noteTitle.text = note.title
+            noteBody.text = note.body
+            textDate.text = "3-8-2025"  // placeholder date
+            noteCardContainer.setCardBackgroundColor(note.bgColor)
 
-    inner class NoteViewHolder(private val binding: FragmentNoteCardBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(note: Note) {
-            binding.noteTitle.text = note.title
-            binding.noteBody.text = note.body
-            binding.noteCard.setBackgroundColor(note.bgColor)
-            binding.root.setOnClickListener {
-                onNoteClick(note)
+            iconEdit.setOnClickListener {
+                onEditClick(note)
             }
+            
+            root.setOnClickListener { onNoteClick(note) }
         }
     }
+
+    override fun getItemCount() = notes.size
 }

@@ -20,4 +20,11 @@
   <color name="muted_teal_blue">#548383</color>
   <color name="soft_blue">#7DA0CA</color>
   <color name="light_sky_blue">#C1E8FF</color>
+
+  <!--  navbar -->
+  <color name="nav_bar_light">#FFFFFF</color>
+  <color name="status_bar_light">#FFFFFF</color>
+  <color name="nav_bar_dark">#121212</color>
+  <color name="status_bar_dark">#121212</color>
+
 </resources>

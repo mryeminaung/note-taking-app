@@ -2,44 +2,35 @@ package com.example.notetakingapp
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.example.notetakingapp.databinding.FragmentNoteDetailBinding
 
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
-    
+    private var _binding: FragmentNoteDetailBinding? = null
+    private val binding get() = _binding!!
+    private val args: NoteDetailFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentNoteDetailBinding.bind(view)
 
-        val noteTitle: TextView = view.findViewById(R.id.note_title)
-        val noteBody: TextView = view.findViewById(R.id.note_body)
-        val noteDetailView: View = view.findViewById(R.id.note_detail_container)
-        val backButton: TextView = view.findViewById(R.id.backToNotesBtn)
+        val title = args.title
+        val body = args.body
+        val bgColor = args.bgColor
 
-        arguments?.let {
-            val title = it.getString("title") ?: "No Title"
-            val body = it.getString("body") ?: "No Content"
-            val bgColor = it.getInt("bgColor")
+        binding.noteTitle.text = title
+//        binding.note.text = body
+        binding.noteDetailContainer.setBackgroundColor(bgColor)
 
-            noteTitle.text = title
-            noteBody.text = body
-            noteDetailView.setBackgroundColor(bgColor)
-        }
-
-        backButton.setOnClickListener {
+        binding.backToNotesBtn.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
-    companion object {
-        fun newInstance(title: String, body: String, bgColor: Int): NoteDetailFragment {
-            return NoteDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString("title", title)
-                    putString("body", body)
-                    putInt("bgColor", bgColor)
-                }
-            }
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

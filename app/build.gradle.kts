@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize") // Add this line
+    id("androidx.navigation.safeargs.kotlin") // Also add this if not present
 }
 
 android {
@@ -48,6 +50,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.9.3")
     implementation("com.google.android.material:material:1.14.0-alpha03")
+    implementation("androidx.cardview:cardview:1.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

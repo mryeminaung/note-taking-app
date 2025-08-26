@@ -1,3 +1,13 @@
 package com.example.notetakingapp
 
-data class Note(val title: String, val body: String, val bgColor: Int)
+import android.os.Parcelable
+import androidx.annotation.Keep
+import kotlinx.parcelize.Parcelize
+
+@Keep
+@Parcelize
+data class Note(
+    val title: String,
+    val body: String,
+    val bgColor: Int
+) : Parcelable

@@ -1,71 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/nav_graph"
   app:startDestination="@id/welcomeActivity">
 
-  <!-- Activities -->
   <activity
     android:id="@+id/welcomeActivity"
     android:name="com.example.notetakingapp.WelcomeActivity"
-    android:label="Welcome" />
-
+    android:label="Welcome"
+    tools:layout="@layout/activity_welcome">
+    <action
+      android:id="@+id/action_welcomeActivity_to_loginActivity"
+      app:destination="@id/loginActivity" />
+    <action
+      android:id="@+id/action_welcomeActivity_to_signupActivity"
+      app:destination="@id/signUpActivity" />
+  </activity>
   <activity
     android:id="@+id/loginActivity"
     android:name="com.example.notetakingapp.LoginActivity"
-    android:label="Login" />
-
+    android:label="Login"
+    tools:layout="@layout/activity_login">
+    <action
+      android:id="@+id/action_loginActivity_to_mainActivity"
+      app:destination="@id/mainActivity"
+      app:popUpTo="@id/nav_graph"
+      app:popUpToInclusive="true" />
+  </activity>
   <activity
     android:id="@+id/signUpActivity"
     android:name="com.example.notetakingapp.SignUpActivity"
-    android:label="Sign Up" />
-
+    android:label="SignUp"
+    tools:layout="@layout/activity_signup">
+    <action
+      android:id="@+id/action_signUpActivity_to_loginActivity"
+      app:destination="@id/loginActivity" />
+    <action
+      android:id="@+id/action_signUpActivity_to_mainActivity"
+      app:destination="@id/mainActivity"
+      app:popUpTo="@id/nav_graph"
+      app:popUpToInclusive="true" />
+  </activity>
   <activity
     android:id="@+id/mainActivity"
     android:name="com.example.notetakingapp.MainActivity"
-    android:label="Main" />
-
-  <!-- Actions between Activities -->
-  <action
-    android:id="@+id/action_welcome_to_login"
-    app:destination="@id/loginActivity" />
-
-  <action
-    android:id="@+id/action_welcome_to_signup"
-    app:destination="@id/signUpActivity" />
-
-  <action
-    android:id="@+id/action_login_to_main"
-    app:destination="@id/mainActivity" />
-
-  <action
-    android:id="@+id/action_signup_to_main"
-    app:destination="@id/mainActivity" />
-
-  <!-- Fragment navigation within MainActivity -->
-  <navigation
-    android:id="@+id/main_nav_graph"
-    app:startDestination="@id/notesFragment">
-
-    <fragment
-      android:id="@+id/notesFragment"
-      android:name="com.example.notetakingapp.NotesFragment"
-      android:label="Notes">
-      <action
-        android:id="@+id/action_notes_to_noteDetail"
-        app:destination="@id/noteDetailFragment" />
-    </fragment>
-
-    <fragment
-      android:id="@+id/settingsFragment"
-      android:name="com.example.notetakingapp.SettingsFragment"
-      android:label="Settings" />
-
-    <fragment
-      android:id="@+id/noteDetailFragment"
-      android:name="com.example.notetakingapp.NoteDetailFragment"
-      android:label="Note Detail" />
-
-  </navigation>
-
+    android:label="MainActivity"
+    tools:layout="@layout/activity_main" />
 </navigation>

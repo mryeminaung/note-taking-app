@@ -1,12 +1,21 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <!-- Base application theme. -->
-  <style name="Base.Theme.NoteTakingapp" parent="Theme.Material3.DayNight.NoActionBar">
-    <!-- Customize your dark theme here. -->
-    <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-  </style>
+<resources>
+  <!--  &lt;!&ndash; Base application theme. &ndash;&gt;-->
+  <!--  <style name="Base.Theme.NoteTakingapp" parent="Theme.Material3.DayNight.NoActionBar">-->
+  <!--    &lt;!&ndash; Customize your dark theme here. &ndash;&gt;-->
+  <!--    &lt;!&ndash; <item name="colorPrimary">@color/my_dark_primary</item> &ndash;&gt;-->
+  <!--  </style>-->
 
-  <style name="ThemeOverlay.NoteTakingapp.FullscreenContainer" parent="">
-    <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
-    <item name="fullscreenTextColor">@color/light_blue_A400</item>
+  <!--  <style name="ThemeOverlay.NoteTakingapp.FullscreenContainer" parent="">-->
+  <!--    <item name="fullscreenBackgroundColor">@color/light_blue_900</item>-->
+  <!--    <item name="fullscreenTextColor">@color/light_blue_A400</item>-->
+  <!--  </style>-->
+
+  <style name="Base.Theme.NoteTakingapp" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="android:navigationBarColor">@color/deep_blue</item>
+    <item name="android:statusBarColor">@color/deep_blue</item>
+    <item name="android:windowLightNavigationBar">false</item>
+    <item name="android:windowLightStatusBar">false</item>
   </style>
 </resources>
+
+

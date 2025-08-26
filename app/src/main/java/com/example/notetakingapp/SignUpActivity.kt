@@ -23,9 +23,5 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-        binding.backBtn.setOnClickListener {
-            finish()
-        }
     }
 }

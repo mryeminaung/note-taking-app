@@ -1,8 +1,6 @@
 package com.example.notetakingapp
 
-import NotesAdapter
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
@@ -41,16 +39,19 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 // TODO: Handle edit
             },
             onNoteClick = { note ->
-                Log.d("Test : ", "Clicking a Card")
                 val action = NotesFragmentDirections
-                    .actionNotesFragmentToNoteDetailFragment(note.id)
+                    .actionNotesFragmentToNoteDetailFragment(
+                        noteId = note.id,
+                        noteTitle = note.title,
+                        noteBody = note.body,
+                        noteBgColor = note.bgColor
+                    )
                 findNavController().navigate(action)
             }
         )
 
         binding.notesContainer.layoutManager = LinearLayoutManager(requireContext())
-//        binding.notesContainer.adapter = NotesAdapter(notes)
-        binding.notesContainer.adapter = adapter // use the adapter with listeners
+        binding.notesContainer.adapter = adapter
     }
 
     override fun onDestroyView() {

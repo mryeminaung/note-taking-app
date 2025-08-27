@@ -1,24 +1,24 @@
-package com.example.notetakingapp
+package com.example.notetakingapp.auth
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.notetakingapp.databinding.ActivityLoginBinding
+import com.example.notetakingapp.databinding.ActivityWelcomeBinding
 
-class LoginActivity : AppCompatActivity() {
-    lateinit var binding: ActivityLoginBinding
+class WelcomeActivity : AppCompatActivity() {
+    lateinit var binding: ActivityWelcomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.loginButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+        binding.loginBtn.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        binding.signupLink.setOnClickListener {
+        binding.signupBtn.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             finish()

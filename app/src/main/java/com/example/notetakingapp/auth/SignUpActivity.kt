@@ -1,8 +1,9 @@
-package com.example.notetakingapp
+package com.example.notetakingapp.auth
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.notetakingapp.MainActivity
 import com.example.notetakingapp.databinding.ActivitySignupBinding
 
 class SignUpActivity : AppCompatActivity() {

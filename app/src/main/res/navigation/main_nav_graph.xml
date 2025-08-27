@@ -5,7 +5,6 @@
   android:id="@+id/main_nav_graph"
   app:startDestination="@id/notesFragment">
 
-  <!-- Notes Fragment: The starting point for the app -->
   <fragment
     android:id="@+id/notesFragment"
     android:name="com.example.notetakingapp.NotesFragment"
@@ -23,13 +22,22 @@
   <fragment
     android:id="@+id/noteDetailFragment"
     android:name="com.example.notetakingapp.NoteDetailFragment"
-    android:label="Note Detail">
+    android:label="Note Detail"
+    tools:layout="@layout/fragment_note_detail">
     <argument
       android:name="noteId"
       app:argType="integer" />
+    <argument
+      android:name="noteTitle"
+      app:argType="string" />
+    <argument
+      android:name="noteBody"
+      app:argType="string" />
+    <argument
+      android:name="noteBgColor"
+      app:argType="integer" />
   </fragment>
 
-  <!-- Settings Fragment -->
   <fragment
     android:id="@+id/settingsFragment"
     android:name="com.example.notetakingapp.SettingsFragment"
@@ -39,5 +47,22 @@
       android:id="@+id/action_settingsFragment_to_notesFragment"
       app:destination="@id/notesFragment" />
   </fragment>
+
+  <!--    navigation between activities using Intent  -->
+  <activity
+    android:id="@+id/welcomeActivity"
+    android:name="com.example.notetakingapp.auth.WelcomeActivity"
+    android:label="WelcomeActivity"
+    tools:layout="@layout/activity_welcome" />
+  <activity
+    android:id="@+id/loginActivity"
+    android:name="com.example.notetakingapp.auth.LoginActivity"
+    android:label="LoginActivity"
+    tools:layout="@layout/activity_login" />
+  <activity
+    android:id="@+id/signUpActivity"
+    android:name="com.example.notetakingapp.auth.SignUpActivity"
+    android:label="SignUpActivity"
+    tools:layout="@layout/activity_signup" />
 
 </navigation>

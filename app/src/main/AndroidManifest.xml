@@ -11,7 +11,7 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.NoteTakingapp">
     <activity
-      android:name=".WelcomeActivity"
+      android:name=".auth.WelcomeActivity"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -24,10 +24,10 @@
       android:name=".MainActivity"
       android:exported="true" />
     <activity
-      android:name=".LoginActivity"
+      android:name=".auth.LoginActivity"
       android:exported="true" />
     <activity
-      android:name=".SignUpActivity"
+      android:name=".auth.SignUpActivity"
       android:exported="true" />
   </application>
 

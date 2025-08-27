@@ -1,7 +1,8 @@
+package com.example.notetakingapp
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.notetakingapp.Note
 import com.example.notetakingapp.databinding.FragmentNoteCardBinding
 
 class NotesAdapter(
@@ -34,7 +35,7 @@ class NotesAdapter(
             iconEdit.setOnClickListener {
                 onEditClick(note)
             }
-            
+
             root.setOnClickListener { onNoteClick(note) }
         }
     }

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+//    id("com.android.application")
+    id("com.google.gms.google-services")
     id("kotlin-parcelize") // Add this line
     id("androidx.navigation.safeargs.kotlin") // Also add this if not present
 }
@@ -46,6 +48,9 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx:22.5.0")
+
     implementation("androidx.navigation:navigation-fragment:2.9.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.9.3")

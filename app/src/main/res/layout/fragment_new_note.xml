@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/new_note"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/white"
+  android:paddingHorizontal="20dp"
+  android:paddingTop="30dp"
+  tools:context=".fragments.NewNoteFragment">
+
+  <TextView
+    android:id="@+id/backToNotesBtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="50dp"
+    android:text="Notes"
+    android:textSize="19sp"
+    android:textStyle="bold"
+    app:drawableStartCompat="@drawable/ic_arrow_back"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <!-- Horizontal ScrollView -->
+  <HorizontalScrollView
+    android:id="@+id/scrollableView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="20dp"
+    android:scrollbars="none"
+    app:layout_constraintTop_toBottomOf="@id/backToNotesBtn">
+
+    <LinearLayout
+      android:id="@+id/bgColorContainer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:paddingVertical="10dp" />
+  </HorizontalScrollView>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="0.1dp"
+    android:layout_marginVertical="10dp"
+    android:background="@color/deep_blue"
+    app:layout_constraintTop_toBottomOf="@id/scrollableView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

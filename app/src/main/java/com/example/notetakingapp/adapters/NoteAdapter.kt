@@ -1,9 +1,10 @@
-package com.example.notetakingapp
+package com.example.notetakingapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notetakingapp.databinding.FragmentNoteCardBinding
+import com.example.notetakingapp.models.Note
 
 class NotesAdapter(
     private val notes: List<Note>,
@@ -32,9 +33,7 @@ class NotesAdapter(
             textDate.text = "3-8-2025"  // placeholder date
             noteCardContainer.setCardBackgroundColor(note.bgColor)
 
-            iconEdit.setOnClickListener {
-                onEditClick(note)
-            }
+            iconEdit.setOnClickListener { onEditClick(note) }
 
             root.setOnClickListener { onNoteClick(note) }
         }

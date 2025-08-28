@@ -7,7 +7,7 @@
 
   <fragment
     android:id="@+id/notesFragment"
-    android:name="com.example.notetakingapp.NotesFragment"
+    android:name="com.example.notetakingapp.fragments.NotesFragment"
     android:label="NotesFragment"
     tools:layout="@layout/fragment_notes">
     <action
@@ -17,11 +17,14 @@
     <action
       android:id="@+id/action_notesFragment_to_noteDetailFragment"
       app:destination="@id/noteDetailFragment" />
+    <action
+      android:id="@+id/action_notesFragment_to_newNoteFragment"
+      app:destination="@id/newNoteFragment" />
   </fragment>
 
   <fragment
     android:id="@+id/noteDetailFragment"
-    android:name="com.example.notetakingapp.NoteDetailFragment"
+    android:name="com.example.notetakingapp.fragments.NoteDetailFragment"
     android:label="Note Detail"
     tools:layout="@layout/fragment_note_detail">
     <argument
@@ -40,12 +43,15 @@
 
   <fragment
     android:id="@+id/settingsFragment"
-    android:name="com.example.notetakingapp.SettingsFragment"
+    android:name="com.example.notetakingapp.fragments.SettingsFragment"
     android:label="SettingsFragment"
     tools:layout="@layout/fragment_settings">
     <action
       android:id="@+id/action_settingsFragment_to_notesFragment"
       app:destination="@id/notesFragment" />
+    <action
+      android:id="@+id/action_settingsFragment_to_loginActivity"
+      app:destination="@id/loginActivity" />
   </fragment>
 
   <!--    navigation between activities using Intent  -->
@@ -64,5 +70,14 @@
     android:name="com.example.notetakingapp.auth.SignUpActivity"
     android:label="SignUpActivity"
     tools:layout="@layout/activity_signup" />
+  <fragment
+    android:id="@+id/newNoteFragment"
+    android:name="com.example.notetakingapp.fragments.NewNoteFragment"
+    android:label="fragment_new_note"
+    tools:layout="@layout/fragment_new_note">
+    <action
+      android:id="@+id/action_newNoteFragment_to_notesFragment"
+      app:destination="@id/notesFragment" />
+  </fragment>
 
 </navigation>

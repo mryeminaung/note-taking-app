@@ -7,12 +7,20 @@
   <color name="light_blue_A200">#FF40C4FF</color>
   <color name="light_blue_A400">#FF00B0FF</color>
   <color name="black_overlay">#66000000</color>
-  <color name="sticky_yellow">#FFF9C4</color>
-  <color name="sticky_blue">#BBDEFB</color>
-  <color name="sticky_green">#C8E6C9</color>
-  <color name="sticky_orange">#FFE0B2</color>
-  <color name="sticky_pink">#F8BBD0</color>
-  <color name="sticky_lavender">#E1BEE7</color>
+
+  <!--  sticky notes color-->
+  <color name="sticky_yellow">#FFF9C4</color>   <!-- Soft pastel yellow -->
+  <color name="sticky_blue">#BBDEFB</color>     <!-- Light pastel blue -->
+  <color name="sticky_green">#C8E6C9</color>    <!-- Soft mint green -->
+  <color name="sticky_orange">#FFE0B2</color>   <!-- Warm pastel orange -->
+  <color name="sticky_pink">#F8BBD0</color>     <!-- Baby pink / pastel rose -->
+  <color name="sticky_lavender">#E1BEE7</color> <!-- Soft lavender purple -->
+
+  <color name="sticky_peach">#FFCCBC</color>    <!-- Gentle peach / coral tint -->
+  <color name="sticky_mint">#B2DFDB</color>     <!-- Aqua mint green -->
+  <color name="sticky_gray">#CFD8DC</color>     <!-- Neutral soft gray -->
+  <color name="sticky_sky">#B3E5FC</color>      <!-- Light sky blue -->
+  <color name="sticky_lime">#F0F4C3</color>     <!-- Pale lime / yellow-green -->
 
   <!-- app main colors-->
   <color name="very_dark_navy">#021024</color>

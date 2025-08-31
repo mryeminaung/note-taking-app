@@ -6,13 +6,13 @@
   </style>
 
   <style name="BottomNavigationActiveText" parent="TextAppearance.MaterialComponents.Caption">
-    <item name="android:textSize">15sp</item>
+    <item name="android:textSize">13sp</item>
     <item name="android:textStyle">normal</item>
     <item name="android:textColor">@color/light_blue_900</item>
   </style>
 
   <style name="BottomNavigationInactiveText" parent="TextAppearance.MaterialComponents.Caption">
-    <item name="android:textSize">15sp</item>
+    <item name="android:textSize">13sp</item>
     <item name="android:textStyle">normal</item>
     <!--    <item name="android:textColor">@color/</item>-->
   </style>

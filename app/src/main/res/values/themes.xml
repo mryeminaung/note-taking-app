@@ -19,7 +19,7 @@
   <style name="Base.Theme.NoteTakingapp" parent="Theme.Material3.DayNight.NoActionBar">
     <!-- App colors -->
     <item name="colorPrimary">@color/white</item>
-    <item name="backgroundTint">@color/deep_blue</item>
+    <!--    <item name="backgroundTint">@color/deep_blue</item>-->
 
     <!-- System Nav + Status Bar -->
     <item name="android:navigationBarColor">@color/deep_blue</item>

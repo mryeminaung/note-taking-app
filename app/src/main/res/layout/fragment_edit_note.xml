@@ -12,7 +12,7 @@
 
   <!-- Floating Add Button -->
   <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/save_note_btn"
+    android:id="@+id/save_edit_note_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="18dp"
@@ -20,7 +20,7 @@
     android:contentDescription="Save Note"
     android:scaleX="1.3"
     android:scaleY="1.3"
-    android:src="@drawable/ic_save"
+    android:src="@drawable/ic_save_edit"
     app:backgroundTint="@android:color/white"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -39,10 +39,10 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <TextView
-      android:id="@+id/backToNotesBtn"
+      android:id="@+id/backToBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Notes"
+      android:text="Back"
       android:textSize="19sp"
       android:textStyle="bold"
       app:drawableStartCompat="@drawable/ic_arrow_back" />
@@ -57,7 +57,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:contentDescription="Refresh to default Settings"
-      android:src="@drawable/ic_refresh" />
+      android:src="@drawable/ic_restore" />
   </LinearLayout>
 
   <!-- Horizontal ScrollView -->

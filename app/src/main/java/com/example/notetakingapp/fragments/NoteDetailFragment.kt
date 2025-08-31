@@ -39,6 +39,10 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
         binding.backToNotesBtn.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.editNoteBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_noteDetailFragment_to_editNoteFragment)
+        }
     }
 
     override fun onDestroyView() {

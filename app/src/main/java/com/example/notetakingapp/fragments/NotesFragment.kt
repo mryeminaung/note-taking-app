@@ -36,22 +36,94 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         )
 
         val notes = listOf(
-            Note(1, "Grocery List", "Milk, Bread, Eggs, Cheese", noteColors[0].toColorInt()),
-            Note(2, "Workout Plan", "Leg day, back day, arm day", noteColors[1].toColorInt()),
+            Note(
+                1,
+                "Grocery List",
+                "Milk, Bread, Eggs, Cheese",
+                false,
+                "High",
+                noteColors[0].toColorInt()
+            ),
+            Note(
+                2,
+                "Workout Plan",
+                "Leg day, back day, arm day",
+                true,
+                "Medium",
+                noteColors[1].toColorInt()
+            ),
             Note(
                 3,
                 "Project Meeting",
                 "Discuss new UI designs, set deadlines",
+                false,
+                "High",
                 noteColors[2].toColorInt()
             ),
-            Note(4, "Book Recommendations", "The Alchemist, Sapiens", noteColors[3].toColorInt()),
-            Note(5, "Weekend Trip", "Pack clothes, book hotel", noteColors[4].toColorInt()),
-            Note(6, "Learning Goals", "Kotlin, Android Nav Graph", noteColors[5].toColorInt()),
-            Note(7, "Birthday Reminder", "Buy gift for Sarah", noteColors[6].toColorInt()),
-            Note(8, "Meditation", "Morning meditation for 15 mins", noteColors[7].toColorInt()),
-            Note(9, "House Chores", "Vacuum, laundry, dishes", noteColors[8].toColorInt()),
-            Note(10, "Meeting Notes", "Client feedback on app", noteColors[9].toColorInt()),
-            Note(11, "Gardening", "Water plants, trim bushes", noteColors[10].toColorInt())
+            Note(
+                4,
+                "Book Recommendations",
+                "The Alchemist, Sapiens",
+                true,
+                "Low",
+                noteColors[3].toColorInt()
+            ),
+            Note(
+                5,
+                "Weekend Trip",
+                "Pack clothes, book hotel",
+                false,
+                "Medium",
+                noteColors[4].toColorInt()
+            ),
+            Note(
+                6,
+                "Learning Goals",
+                "Kotlin, Android Nav Graph",
+                false,
+                "High",
+                noteColors[5].toColorInt()
+            ),
+            Note(
+                7,
+                "Birthday Reminder",
+                "Buy gift for Sarah",
+                true,
+                "High",
+                noteColors[6].toColorInt()
+            ),
+            Note(
+                8,
+                "Meditation",
+                "Morning meditation for 15 mins",
+                false,
+                "Low",
+                noteColors[7].toColorInt()
+            ),
+            Note(
+                9,
+                "House Chores",
+                "Vacuum, laundry, dishes",
+                false,
+                "Medium",
+                noteColors[8].toColorInt()
+            ),
+            Note(
+                10,
+                "Meeting Notes",
+                "Client feedback on app",
+                true,
+                "High",
+                noteColors[9].toColorInt()
+            ),
+            Note(
+                11,
+                "Gardening",
+                "Water plants, trim bushes",
+                false,
+                "Low",
+                noteColors[10].toColorInt()
+            )
         )
 
         binding.newNoteBtn.setOnClickListener {

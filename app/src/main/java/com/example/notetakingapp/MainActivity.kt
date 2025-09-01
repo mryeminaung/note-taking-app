@@ -24,17 +24,17 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_notes -> {
-                    val currentDest = navController.currentDestination?.id
-                    if (currentDest != R.id.notesFragment) {
-                        navController.navigate(R.id.action_settingsFragment_to_notesFragment)
+                    // Navigate to notesFragment from **anywhere**
+                    if (navController.currentDestination?.id != R.id.notesFragment) {
+                        navController.navigate(R.id.notesFragment)
                     }
                     true
                 }
 
                 R.id.menu_settings -> {
-                    val currentDest = navController.currentDestination?.id
-                    if (currentDest != R.id.settingsFragment) {
-                        navController.navigate(R.id.action_notesFragment_to_settingsFragment)
+                    // Navigate to settingsFragment from **anywhere**
+                    if (navController.currentDestination?.id != R.id.settingsFragment) {
+                        navController.navigate(R.id.settingsFragment)
                     }
                     true
                 }
@@ -42,5 +42,6 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
     }
 }

@@ -32,7 +32,7 @@
     android:id="@+id/backContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="50dp"
+    android:layout_marginTop="35dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     app:layout_constraintLeft_toLeftOf="parent"
@@ -94,6 +94,7 @@
     app:layout_constraintTop_toBottomOf="@id/divider">
 
     <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/noteTitle"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="15dp"
@@ -103,6 +104,7 @@
       android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/noteBody"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@null"

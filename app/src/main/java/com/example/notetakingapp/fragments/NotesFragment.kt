@@ -1,139 +1,31 @@
 package com.example.notetakingapp.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notetakingapp.R
 import com.example.notetakingapp.adapters.NotesAdapter
+import com.example.notetakingapp.data.database.NoteDatabase
+import com.example.notetakingapp.data.models.Note
 import com.example.notetakingapp.databinding.FragmentNotesBinding
-import com.example.notetakingapp.models.Note
+import kotlinx.coroutines.launch
 
 class NotesFragment : Fragment(R.layout.fragment_notes) {
 
     private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter: NotesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentNotesBinding.bind(view)
 
-        val noteColors = listOf(
-            "#FFF9C4", // sticky_yellow
-            "#BBDEFB", // sticky_blue
-            "#C8E6C9", // sticky_green
-            "#FFE0B2", // sticky_orange
-            "#F8BBD0", // sticky_pink
-            "#E1BEE7", // sticky_lavender
-            "#FFCCBC", // sticky_peach
-            "#B2DFDB", // sticky_mint
-            "#CFD8DC", // sticky_gray
-            "#B3E5FC", // sticky_sky
-            "#F0F4C3"  // sticky_lime
-        )
-
-        val notes = listOf(
-            Note(
-                1,
-                "Grocery List",
-                "Milk, Bread, Eggs, Cheese",
-                false,
-                "High",
-                noteColors[0].toColorInt()
-            ),
-            Note(
-                2,
-                "Workout Plan",
-                "Leg day, back day, arm day",
-                true,
-                "Medium",
-                noteColors[1].toColorInt()
-            ),
-            Note(
-                3,
-                "Project Meeting",
-                "Discuss new UI designs, set deadlines",
-                false,
-                "High",
-                noteColors[2].toColorInt()
-            ),
-            Note(
-                4,
-                "Book Recommendations",
-                "The Alchemist, Sapiens",
-                true,
-                "Low",
-                noteColors[3].toColorInt()
-            ),
-            Note(
-                5,
-                "Weekend Trip",
-                "Pack clothes, book hotel",
-                false,
-                "Medium",
-                noteColors[4].toColorInt()
-            ),
-            Note(
-                6,
-                "Learning Goals",
-                "Kotlin, Android Nav Graph",
-                false,
-                "High",
-                noteColors[5].toColorInt()
-            ),
-            Note(
-                7,
-                "Birthday Reminder",
-                "Buy gift for Sarah",
-                true,
-                "High",
-                noteColors[6].toColorInt()
-            ),
-            Note(
-                8,
-                "Meditation",
-                "Morning meditation for 15 mins",
-                false,
-                "Low",
-                noteColors[7].toColorInt()
-            ),
-            Note(
-                9,
-                "House Chores",
-                "Vacuum, laundry, dishes",
-                false,
-                "Medium",
-                noteColors[8].toColorInt()
-            ),
-            Note(
-                10,
-                "Meeting Notes",
-                "Client feedback on app",
-                true,
-                "High",
-                noteColors[9].toColorInt()
-            ),
-            Note(
-                11,
-                "Gardening",
-                "Water plants, trim bushes",
-                false,
-                "Low",
-                noteColors[10].toColorInt()
-            )
-        )
-
-        binding.newNoteBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_notesFragment_to_newNoteFragment)
-        }
-
-        val adapter = NotesAdapter(
-            notes,
-            onEditClick = { note ->
-                Log.d("editNote", "Note Edit")
+        adapter = NotesAdapter(
+            onDeleteClick = { note ->
+                deleteNote(note)
             },
             onNoteClick = { note ->
                 val action = NotesFragmentDirections
@@ -147,9 +39,36 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             }
         )
 
+        getAllNotes()
+
         binding.notesContainer.layoutManager = LinearLayoutManager(requireContext())
         binding.notesContainer.adapter = adapter
+
+        binding.newNoteBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_notesFragment_to_newNoteFragment)
+        }
     }
+
+    private fun getAllNotes() {
+        val db = NoteDatabase.getDatabase(requireContext())
+        val noteDao = db.noteDao()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val notes = noteDao.index()
+            adapter.updateNotes(notes) // update RecyclerView
+        }
+    }
+
+    private fun deleteNote(note: Note) {
+        val db = NoteDatabase.getDatabase(requireContext())
+        val noteDao = db.noteDao()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            noteDao.delete(note)
+            getAllNotes()
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-parcelize") // Add this line
     id("androidx.navigation.safeargs.kotlin") // Also add this if not present
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -48,14 +49,25 @@ android {
 }
 
 dependencies {
+//    firebase setup
     implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
     implementation("com.google.firebase:firebase-analytics-ktx:22.5.0")
 
+//    Room database setup
+    val room_version = "2.7.2"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
+//    navigation setup
     implementation("androidx.navigation:navigation-fragment:2.9.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.9.3")
+
+//    material design setup
     implementation("com.google.android.material:material:1.14.0-alpha03")
     implementation("androidx.cardview:cardview:1.0.0")
+
+//    default setup
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

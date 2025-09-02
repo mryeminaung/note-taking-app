@@ -45,7 +45,7 @@
       android:layout_marginTop="5dp"
       android:text="Ye Min Aung"
       android:textColor="@color/black"
-      android:textSize="25sp"
+      android:textSize="20sp"
       android:textStyle="bold" />
 
     <TextView
@@ -86,7 +86,7 @@
         android:layout_marginBottom="10dp"
         android:text="Notes Summary"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
       <!-- Notes and Starred Cards -->
@@ -117,7 +117,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Notes"
-              android:textSize="17sp"
+              android:textSize="15sp"
               android:textStyle="bold" />
 
             <TextView
@@ -153,7 +153,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Starred"
-              android:textSize="17sp"
+              android:textSize="15sp"
               android:textStyle="bold" />
 
             <TextView
@@ -178,7 +178,7 @@
         android:layout_marginBottom="10dp"
         android:text="Settings"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
       <!-- Settings Rows -->
@@ -252,7 +252,7 @@
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_marginHorizontal="15dp"
-          android:layout_marginVertical="10dp"
+          android:layout_marginVertical="5dp"
           android:background="@color/sticky_gray" />
 
         <!-- Change Password -->
@@ -327,7 +327,7 @@
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_marginHorizontal="15dp"
-          android:layout_marginVertical="10dp"
+          android:layout_marginVertical="5dp"
           android:background="@color/sticky_gray" />
 
         <!-- Theme Preference -->
@@ -472,7 +472,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="5dp"
         android:background="@color/sticky_gray" />
 
       <!-- Space to push logout button to bottom -->

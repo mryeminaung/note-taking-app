@@ -3,12 +3,15 @@ package com.example.notetakingapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notetakingapp.data.models.Note
 import com.example.notetakingapp.databinding.FragmentNoteCardBinding
-import com.example.notetakingapp.models.Note
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class NotesAdapter(
-    private val notes: List<Note>,
-    private val onEditClick: (Note) -> Unit = {},
+    private var notes: List<Note> = emptyList(),
+    private val onDeleteClick: (Note) -> Unit = {},
     private val onNoteClick: (Note) -> Unit = {}
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
@@ -24,19 +27,26 @@ class NotesAdapter(
         return NoteViewHolder(binding)
     }
 
+    
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = notes[position]
 
         holder.binding.apply {
             noteTitle.text = note.title
             noteBody.text = note.body
-            textDate.text = "3-8-2025"  // placeholder date
+            val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            textDate.text = sdf.format(Date(note.createdAt))
             noteCardContainer.setCardBackgroundColor(note.bgColor)
 
-            iconEdit.setOnClickListener { onEditClick(note) }
+            iconDelete.setOnClickListener { onDeleteClick(note) }
 
             root.setOnClickListener { onNoteClick(note) }
         }
+    }
+
+    fun updateNotes(newNotes: List<Note>) {
+        notes = newNotes
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = notes.size

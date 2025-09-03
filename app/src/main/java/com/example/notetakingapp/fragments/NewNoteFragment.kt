@@ -21,7 +21,22 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
     private var _binding: FragmentNewNoteBinding? = null
     private val binding get() = _binding!!
 
-    var noteBgColor: Int = 0
+    private var noteBgColor: Int = 0
+    private var selectedCircle: View? = null
+
+    private val colors: List<Int> = listOf(
+        R.color.sticky_yellow,
+        R.color.sticky_blue,
+        R.color.sticky_green,
+        R.color.sticky_orange,
+        R.color.sticky_pink,
+        R.color.sticky_lavender,
+        R.color.sticky_peach,
+        R.color.sticky_mint,
+        R.color.sticky_gray,
+        R.color.sticky_sky,
+        R.color.sticky_lime
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +59,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         val noteDao = db.noteDao()
 
         binding.saveNoteBtn.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
+            lifecycleScope.launch {
                 noteDao.insert(
                     Note(
                         title = binding.noteTitle.text.toString(),
@@ -55,32 +70,20 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             }
             findNavController().navigate(R.id.action_newNoteFragment_to_notesFragment)
         }
+
+        binding.refreshBtn.setOnClickListener {
+            resetNote()
+        }
     }
 
     private fun showStickyColors() {
-        var selectedCircle: View? = null
-
-        val colors: List<Int> = listOf(
-            R.color.sticky_yellow,
-            R.color.sticky_blue,
-            R.color.sticky_green,
-            R.color.sticky_orange,
-            R.color.sticky_pink,
-            R.color.sticky_lavender,
-            R.color.sticky_peach,
-            R.color.sticky_mint,
-            R.color.sticky_gray,
-            R.color.sticky_sky,
-            R.color.sticky_lime
-        )
-
         val container = binding.bgColorContainer
 
         // Default color
         noteBgColor = ContextCompat.getColor(requireContext(), R.color.sticky_gray)
         binding.newNote.background = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
-            cornerRadius = 16f // small smooth corner
+            cornerRadius = 16f
             setColor(noteBgColor)
         }
 
@@ -92,10 +95,9 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
                 val colorInt = ContextCompat.getColor(requireContext(), colorRes)
 
-                // Rounded rectangle
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 16f // smooth corners
+                    cornerRadius = 16f
                     setColor(colorInt)
                 }
 
@@ -148,6 +150,33 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             }
 
             container.addView(circle)
+        }
+    }
+
+    private fun resetNote() {
+        // Reset title and body
+        binding.noteTitle.setText("")
+        binding.noteBody.setText("")
+
+        // Reset background color to default gray
+        noteBgColor = ContextCompat.getColor(requireContext(), R.color.sticky_gray)
+        binding.newNote.background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 16f
+            setColor(noteBgColor)
+        }
+
+        // Reset color picker highlight
+        val container = binding.bgColorContainer
+        for (i in 0 until container.childCount) {
+            val circle = container.getChildAt(i)
+            val bg = circle.background as GradientDrawable
+            if (colors[i] == R.color.sticky_gray) {
+                bg.setStroke(4, ContextCompat.getColor(requireContext(), R.color.black))
+                selectedCircle = circle
+            } else {
+                bg.setStroke(0, 0)
+            }
         }
     }
 

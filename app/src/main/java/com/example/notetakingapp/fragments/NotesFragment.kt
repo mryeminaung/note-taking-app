@@ -31,9 +31,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 val action = NotesFragmentDirections
                     .actionNotesFragmentToNoteDetailFragment(
                         noteId = note.id,
-                        noteTitle = note.title,
-                        noteBody = note.body,
-                        noteBgColor = note.bgColor
                     )
                 findNavController().navigate(action)
             }
@@ -68,7 +65,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             getAllNotes()
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

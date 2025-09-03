@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notetakingapp.R
+import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.databinding.FragmentNoteDetailBinding
+import kotlinx.coroutines.launch
 
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
@@ -28,20 +31,32 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val noteId = args.noteId.toString()
-        val noteTitle = args.noteTitle.toString()
-        val noteBody = args.noteBody.toString()
-        val noteBgColor = args.noteBgColor
-        binding.noteTitle.text = noteTitle
-        binding.noteBody.text = noteBody
-        binding.noteDetailContainer.setBackgroundColor(noteBgColor)
+        showNote()
 
         binding.backToNotesBtn.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.editNoteBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_noteDetailFragment_to_editNoteFragment)
+            val action = NoteDetailFragmentDirections
+                .actionNoteDetailFragmentToEditNoteFragment(args.noteId)
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun showNote() {
+        val db = NoteDatabase.getDatabase(requireContext())
+        val noteDao = db.noteDao()
+
+        val noteId = args.noteId
+
+        lifecycleScope.launch {
+            val note = noteDao.show(noteId)
+            note?.let {
+                binding.noteTitle.text = it.title
+                binding.noteBody.text = it.body
+                binding.noteDetailContainer.setBackgroundColor(it.bgColor)
+            }
         }
     }
 

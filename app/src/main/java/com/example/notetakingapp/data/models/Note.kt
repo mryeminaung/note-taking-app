@@ -9,8 +9,8 @@ data class Note(
     val id: Int = 0,
     val title: String,
     val body: String,
-    val starred: Boolean = false,
-    val priority: String = "Low",
+    var starred: Boolean = false,
+    var priority: String = "Low",
     val bgColor: Int,
     val createdAt: Long = System.currentTimeMillis() // default = now
 )

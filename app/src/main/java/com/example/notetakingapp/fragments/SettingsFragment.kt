@@ -5,9 +5,12 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.notetakingapp.R
+import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.databinding.FragmentSettingsBinding
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
@@ -17,6 +20,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
+        fetchNoteCounts()
 
         binding.logOutBtn.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_loginActivity)
@@ -44,6 +48,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 binding.userNameCard to binding.userNameArrow,
                 binding.pwdCard to binding.pwdArrow
             )
+        }
+    }
+
+    private fun fetchNoteCounts() {
+        val db = NoteDatabase.getDatabase(requireContext())
+        val noteDao = db.noteDao()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val totalNotes = noteDao.countAllNotes()
+            val starredNotes = noteDao.countStarredNotes()
+
+            binding.tvNotesCount.text = totalNotes.toString()
+            binding.tvStarredCount.text = starredNotes.toString()
         }
     }
 

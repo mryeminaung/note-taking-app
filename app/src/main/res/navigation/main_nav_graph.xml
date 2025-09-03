@@ -30,15 +30,6 @@
     <argument
       android:name="noteId"
       app:argType="integer" />
-    <argument
-      android:name="noteTitle"
-      app:argType="string" />
-    <argument
-      android:name="noteBody"
-      app:argType="string" />
-    <argument
-      android:name="noteBgColor"
-      app:argType="integer" />
     <action
       android:id="@+id/action_noteDetailFragment_to_editNoteFragment"
       app:destination="@id/editNoteFragment" />
@@ -87,6 +78,9 @@
     android:name="com.example.notetakingapp.fragments.EditNoteFragment"
     android:label="fragment_edit_note"
     tools:layout="@layout/fragment_edit_note">
+    <argument
+      android:name="noteId"
+      app:argType="integer" />
     <action
       android:id="@+id/action_editNoteFragment_to_noteDetailFragment"
       app:destination="@id/noteDetailFragment" />

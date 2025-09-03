@@ -29,5 +29,12 @@ interface NoteDao {
     // Delete a note
     @Delete
     suspend fun delete(note: Note)
+
+    @Query("SELECT COUNT(*) FROM notes")
+    suspend fun countAllNotes(): Int
+
+    @Query("SELECT COUNT(*) FROM notes WHERE starred = 1")
+    suspend fun countStarredNotes(): Int
+
 }
 

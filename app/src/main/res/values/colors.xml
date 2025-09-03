@@ -15,12 +15,21 @@
   <color name="sticky_orange">#FFE0B2</color>   <!-- Warm pastel orange -->
   <color name="sticky_pink">#F8BBD0</color>     <!-- Baby pink / pastel rose -->
   <color name="sticky_lavender">#E1BEE7</color> <!-- Soft lavender purple -->
-
   <color name="sticky_peach">#FFCCBC</color>    <!-- Gentle peach / coral tint -->
   <color name="sticky_mint">#B2DFDB</color>     <!-- Aqua mint green -->
   <color name="sticky_gray">#CFD8DC</color>     <!-- Neutral soft gray -->
   <color name="sticky_sky">#B3E5FC</color>      <!-- Light sky blue -->
   <color name="sticky_lime">#F0F4C3</color>     <!-- Pale lime / yellow-green -->
+
+  <!-- Rainbow colors -->
+  <color name="rainbow_white">#FFFFFFFF</color>
+  <color name="rainbow_red">#FF0000</color>
+  <color name="rainbow_orange">#FF7F00</color>
+  <color name="rainbow_yellow">#FFFF00</color>
+  <color name="rainbow_green">#00FF00</color>
+  <color name="rainbow_blue">#0000FF</color>
+  <color name="rainbow_indigo">#4B0082</color>
+  <color name="rainbow_violet">#8B00FF</color>
 
   <!-- app main colors-->
   <color name="very_dark_navy">#021024</color>

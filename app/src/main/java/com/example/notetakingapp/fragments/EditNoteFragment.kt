@@ -8,15 +8,24 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.notetakingapp.R
+import com.example.notetakingapp.data.database.NoteDatabase
+import com.example.notetakingapp.data.models.Note
 import com.example.notetakingapp.databinding.FragmentEditNoteBinding
+import kotlinx.coroutines.launch
 
 class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
     private var _binding: FragmentEditNoteBinding? = null
     private val binding get() = _binding!!
 
-    var noteBgColor: Int = 0
+    private val args: EditNoteFragmentArgs by navArgs()
+
+    private var noteBgColor: Int = 0
+    private var selectedCircle: View? = null
+    private var originalNote: Note? = null // keep original state
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,15 +43,73 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
         }
 
         showStickyColors()
+        showNote()
 
         binding.saveEditNoteBtn.setOnClickListener {
+            updateNote()
+        }
+
+        // Refresh button restores original state
+        binding.refreshBtn.setOnClickListener {
+            restoreOriginalState()
+        }
+    }
+
+    private fun showNote() {
+        val db = NoteDatabase.getDatabase(requireContext())
+        val noteDao = db.noteDao()
+
+        val noteId = args.noteId
+
+        lifecycleScope.launch {
+            val note = noteDao.show(noteId)
+            note?.let {
+                originalNote = it // save original note for reset
+                restoreOriginalState()
+            }
+        }
+    }
+
+    private fun restoreOriginalState() {
+        originalNote?.let {
+            binding.noteTitle.setText(it.title)
+            binding.noteBody.setText(it.body)
+
+            // reset container bg
+            binding.noteEditContainer.setBackgroundColor(it.bgColor)
+
+            // reset noteBgColor
+            noteBgColor = it.bgColor
+
+            // re-highlight correct circle
+            highlightSelectedColor(it.bgColor)
+        }
+    }
+
+    private fun updateNote() {
+        val db = NoteDatabase.getDatabase(requireContext())
+        val noteDao = db.noteDao()
+
+        val noteId = args.noteId
+        val updatedTitle = binding.noteTitle.text.toString()
+        val updatedBody = binding.noteBody.text.toString()
+        val updatedColor = noteBgColor
+
+        lifecycleScope.launch {
+            val note = noteDao.show(noteId)
+            note?.let {
+                val updatedNote = it.copy(
+                    title = updatedTitle,
+                    body = updatedBody,
+                    bgColor = updatedColor
+                )
+                noteDao.update(updatedNote)
+            }
             findNavController().navigateUp()
         }
     }
 
     private fun showStickyColors() {
-        var selectedCircle: View? = null
-
         val colors: List<Int> = listOf(
             R.color.sticky_yellow,
             R.color.sticky_blue,
@@ -59,14 +126,6 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
 
         val container = binding.bgColorContainer
 
-        // Default color
-        noteBgColor = ContextCompat.getColor(requireContext(), R.color.sticky_gray)
-        binding.editNote.background = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 16f // small smooth corner
-            setColor(noteBgColor)
-        }
-
         for (colorRes in colors) {
             val circle = View(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(120, 120).apply {
@@ -74,23 +133,10 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                 }
 
                 val colorInt = ContextCompat.getColor(requireContext(), colorRes)
-
-                // Rounded rectangle
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 16f // smooth corners
+                    cornerRadius = 16f
                     setColor(colorInt)
-                }
-
-                // Highlight default gray
-                if (colorRes == R.color.sticky_gray) {
-                    background = GradientDrawable().apply {
-                        shape = GradientDrawable.RECTANGLE
-                        cornerRadius = 16f
-                        setColor(colorInt)
-                        setStroke(4, ContextCompat.getColor(requireContext(), R.color.black))
-                    }
-                    selectedCircle = this
                 }
 
                 setOnClickListener {
@@ -98,39 +144,41 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                     noteBgColor = selectedColorInt
 
                     // Update note background
-                    binding.editNote.background = GradientDrawable().apply {
+                    binding.noteEditContainer.background = GradientDrawable().apply {
                         shape = GradientDrawable.RECTANGLE
                         cornerRadius = 16f
                         setColor(selectedColorInt)
                     }
 
                     // Remove previous highlight
-                    selectedCircle?.let { prevCircle ->
-                        val prevIndex = container.indexOfChild(prevCircle)
-                        colors.getOrNull(prevIndex)?.let { prevColorRes ->
-                            val prevColorInt =
-                                ContextCompat.getColor(requireContext(), prevColorRes)
-                            prevCircle.background = GradientDrawable().apply {
-                                shape = GradientDrawable.RECTANGLE
-                                cornerRadius = 16f
-                                setColor(prevColorInt)
-                            }
-                        }
-                    }
+                    (selectedCircle?.background as? GradientDrawable)?.setStroke(0, 0)
 
                     // Highlight selected
-                    background = GradientDrawable().apply {
-                        shape = GradientDrawable.RECTANGLE
-                        cornerRadius = 16f
-                        setColor(selectedColorInt)
-                        setStroke(4, ContextCompat.getColor(requireContext(), R.color.black))
-                    }
+                    (background as GradientDrawable).setStroke(
+                        4, ContextCompat.getColor(requireContext(), R.color.black)
+                    )
 
                     selectedCircle = this
                 }
             }
 
             container.addView(circle)
+        }
+    }
+
+    private fun highlightSelectedColor(colorInt: Int) {
+        val container = binding.bgColorContainer
+        for (i in 0 until container.childCount) {
+            val circle = container.getChildAt(i)
+            val bg = circle.background as GradientDrawable
+            if (bg.color?.defaultColor == colorInt) {
+                // highlight this circle
+                bg.setStroke(4, ContextCompat.getColor(requireContext(), R.color.black))
+                selectedCircle = circle
+            } else {
+                // reset others
+                bg.setStroke(0, 0)
+            }
         }
     }
 

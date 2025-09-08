@@ -67,9 +67,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@drawable/ic_sort" />
-
   </LinearLayout>
 
+  <!-- Search Bar -->
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/note_search_layout"
     android:layout_width="match_parent"
@@ -98,6 +98,7 @@
       android:singleLine="true" />
   </com.google.android.material.textfield.TextInputLayout>
 
+  <!-- TabLayout -->
   <com.google.android.material.tabs.TabLayout
     android:id="@+id/note_tabs"
     android:layout_width="match_parent"
@@ -109,7 +110,7 @@
     app:tabGravity="fill"
     app:tabIndicatorColor="@color/deep_blue"
     app:tabIndicatorFullWidth="true"
-    app:tabIndicatorHeight="1dp"
+    app:tabIndicatorHeight="3dp"
     app:tabMode="fixed"
     app:tabSelectedTextColor="@color/deep_blue"
     app:tabTextColor="#6B7280">
@@ -123,9 +124,66 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Starred Notes" />
-
   </com.google.android.material.tabs.TabLayout>
 
+  <!-- Empty State -->
+  <LinearLayout
+    android:id="@+id/emptyState"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="100dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/note_tabs">
+
+    <ImageView
+      android:id="@+id/emptyImage"
+      android:layout_width="300dp"
+      android:layout_height="300dp"
+      android:layout_marginBottom="15dp"
+      android:src="@drawable/add_note" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="You have no notes yet!"
+      android:textColor="@color/black"
+      android:textSize="16sp"
+      android:textStyle="bold" />
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tap the "
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+      <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:contentDescription="Add button"
+        android:src="@drawable/ic_add" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" button to add your first note."
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+    </LinearLayout>
+  </LinearLayout>
+
+  <!-- RecyclerView -->
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/notes_container"
     android:layout_width="match_parent"
@@ -135,5 +193,26 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/note_tabs" />
+
+  <TextView
+    android:id="@+id/emptyText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <!-- Loading Spinner -->
+  <ProgressBar
+    android:id="@+id/loadingSpinner"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

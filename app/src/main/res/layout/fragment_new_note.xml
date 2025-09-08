@@ -10,7 +10,7 @@
   android:paddingTop="30dp"
   tools:context=".fragments.NewNoteFragment">
 
-  <!-- Floating Add Button -->
+  <!-- Floating Save Button -->
   <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/save_note_btn"
     android:layout_width="wrap_content"
@@ -28,6 +28,7 @@
     app:strokeColor="@color/deep_blue"
     app:strokeWidth="1dp" />
 
+  <!-- Back & Refresh -->
   <LinearLayout
     android:id="@+id/backContainer"
     android:layout_width="match_parent"
@@ -60,7 +61,7 @@
       android:src="@drawable/ic_refresh" />
   </LinearLayout>
 
-  <!-- Horizontal ScrollView -->
+  <!-- Horizontal ScrollView for Sticky Colors -->
   <HorizontalScrollView
     android:id="@+id/scrollableView"
     android:layout_width="match_parent"
@@ -86,6 +87,7 @@
     android:background="@color/deep_blue"
     app:layout_constraintTop_toBottomOf="@id/scrollableView" />
 
+  <!-- Title, Priority, and Body -->
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -97,7 +99,7 @@
       android:id="@+id/noteTitle"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="15dp"
+      android:layout_marginBottom="10dp"
       android:background="@null"
       android:hint="Title"
       android:textSize="25sp"

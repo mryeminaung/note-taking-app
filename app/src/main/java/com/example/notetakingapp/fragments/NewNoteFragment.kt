@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,16 +14,18 @@ import androidx.navigation.fragment.findNavController
 import com.example.notetakingapp.R
 import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.data.models.Note
+import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNewNoteBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
 class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
     private var _binding: FragmentNewNoteBinding? = null
     private val binding get() = _binding!!
-
     private var noteBgColor: Int = 0
     private var selectedCircle: View? = null
+    private lateinit var repository: NotesRepository
 
     private val colors: List<Int> = listOf(
         R.color.sticky_yellow,
@@ -49,37 +52,20 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        repository = NotesRepository(NoteDatabase.getDatabase(requireContext()).noteDao())
+
         binding.backToNotesBtn.setOnClickListener {
             findNavController().navigate(R.id.action_newNoteFragment_to_notesFragment)
         }
 
         showStickyColors()
 
-        val db = NoteDatabase.getDatabase(requireContext())
-        val noteDao = db.noteDao()
-
-        binding.saveNoteBtn.setOnClickListener {
-            lifecycleScope.launch {
-                noteDao.insert(
-                    Note(
-                        title = binding.noteTitle.text.toString(),
-                        body = binding.noteBody.text.toString(),
-                        bgColor = noteBgColor
-                    )
-                )
-            }
-            findNavController().navigate(R.id.action_newNoteFragment_to_notesFragment)
-        }
-
-        binding.refreshBtn.setOnClickListener {
-            resetNote()
-        }
+        binding.saveNoteBtn.setOnClickListener { saveNote() }
+        binding.refreshBtn.setOnClickListener { resetNote() }
     }
 
     private fun showStickyColors() {
         val container = binding.bgColorContainer
-
-        // Default color
         noteBgColor = ContextCompat.getColor(requireContext(), R.color.sticky_gray)
         binding.newNote.background = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
@@ -92,16 +78,13 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                 layoutParams = LinearLayout.LayoutParams(120, 120).apply {
                     setMargins(20, 0, 20, 0)
                 }
-
                 val colorInt = ContextCompat.getColor(requireContext(), colorRes)
-
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = 16f
                     setColor(colorInt)
                 }
 
-                // Highlight default gray
                 if (colorRes == R.color.sticky_gray) {
                     background = GradientDrawable().apply {
                         shape = GradientDrawable.RECTANGLE
@@ -115,15 +98,11 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                 setOnClickListener {
                     val selectedColorInt = ContextCompat.getColor(requireContext(), colorRes)
                     noteBgColor = selectedColorInt
-
-                    // Update note background
                     binding.newNote.background = GradientDrawable().apply {
                         shape = GradientDrawable.RECTANGLE
                         cornerRadius = 16f
                         setColor(selectedColorInt)
                     }
-
-                    // Remove previous highlight
                     selectedCircle?.let { prevCircle ->
                         val prevIndex = container.indexOfChild(prevCircle)
                         colors.getOrNull(prevIndex)?.let { prevColorRes ->
@@ -136,29 +115,104 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                             }
                         }
                     }
-
-                    // Highlight selected
                     background = GradientDrawable().apply {
                         shape = GradientDrawable.RECTANGLE
                         cornerRadius = 16f
                         setColor(selectedColorInt)
                         setStroke(4, ContextCompat.getColor(requireContext(), R.color.black))
                     }
-
                     selectedCircle = this
                 }
             }
-
             container.addView(circle)
         }
     }
 
+    private fun saveNote() {
+        val title = binding.noteTitle.text.toString().trim()
+        val body = binding.noteBody.text.toString().trim()
+
+        when {
+            title.isEmpty() && body.isEmpty() -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Title and body cannot be empty",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            title.isEmpty() -> {
+                Toast.makeText(requireContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show()
+            }
+
+            body.isEmpty() -> {
+                Toast.makeText(requireContext(), "Body cannot be empty", Toast.LENGTH_SHORT).show()
+            }
+
+            else -> {
+                // Show priority selection dialog
+                showPriorityDialog { selectedPriority ->
+                    // After selecting priority, insert note
+                    lifecycleScope.launch {
+                        repository.insertNote(
+                            Note(
+                                title = title,
+                                body = body,
+                                bgColor = noteBgColor,
+                                priority = selectedPriority
+                            )
+                        )
+                        findNavController().navigate(R.id.action_newNoteFragment_to_notesFragment)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showPriorityDialog(onPrioritySelected: (String) -> Unit) {
+        val priorities = arrayOf("High", "Medium", "Low")
+        var selectedIndex = 2
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.ic_error)
+            .setTitle("Select Note Priority")
+            .setSingleChoiceItems(priorities, selectedIndex) { _, which ->
+                selectedIndex = which
+            }
+            .setPositiveButton("Save") { d, _ ->
+                onPrioritySelected(priorities[selectedIndex].lowercase())
+                d.dismiss()
+            }
+            .setNegativeButton("Cancel") { d, _ ->
+                d.dismiss()
+            }
+            .show()
+
+        val positiveButton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+        positiveButton.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.deep_blue
+            )
+        )
+        positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        positiveButton.setPadding(40, 20, 40, 20)
+
+        val negativeButton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+        negativeButton.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.sticky_gray
+            )
+        )
+        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        negativeButton.setPadding(40, 20, 40, 20)
+    }
+
+
     private fun resetNote() {
-        // Reset title and body
         binding.noteTitle.setText("")
         binding.noteBody.setText("")
-
-        // Reset background color to default gray
         noteBgColor = ContextCompat.getColor(requireContext(), R.color.sticky_gray)
         binding.newNote.background = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
@@ -166,7 +220,6 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             setColor(noteBgColor)
         }
 
-        // Reset color picker highlight
         val container = binding.bgColorContainer
         for (i in 0 until container.childCount) {
             val circle = container.getChildAt(i)

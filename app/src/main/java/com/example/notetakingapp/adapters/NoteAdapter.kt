@@ -6,8 +6,8 @@ import android.view.animation.ScaleAnimation
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notetakingapp.R
-import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.data.models.Note
+import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNoteCardBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -19,19 +19,18 @@ import java.util.Locale
 
 class NotesAdapter(
     private var notes: List<Note> = emptyList(),
+    private val repository: NotesRepository,
     private val onDeleteClick: (Note) -> Unit = {},
-    private val onNoteClick: (Note) -> Unit = {}
+    private val onNoteClick: (Note) -> Unit = {},
+    private val onStarClick: (() -> Unit)? = null
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
     inner class NoteViewHolder(val binding: FragmentNoteCardBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val binding = FragmentNoteCardBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        val binding =
+            FragmentNoteCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoteViewHolder(binding)
     }
 
@@ -44,7 +43,14 @@ class NotesAdapter(
             noteBody.text = note.body
             noteCardContainer.setCardBackgroundColor(note.bgColor)
 
-            // Star icon color
+            val priorityColor = when (note.priority.lowercase()) {
+                "high" -> R.color.rainbow_red
+                "medium" -> R.color.rainbow_orange
+                "low" -> R.color.rainbow_green
+                else -> R.color.sticky_gray
+            }
+            priorityIndicator.setColorFilter(ContextCompat.getColor(context, priorityColor))
+
             iconStar.setColorFilter(
                 if (note.starred) ContextCompat.getColor(context, R.color.rainbow_yellow)
                 else ContextCompat.getColor(context, R.color.black)
@@ -63,10 +69,12 @@ class NotesAdapter(
                 anim.duration = 150
                 iconStar.startAnimation(anim)
 
-                // Update DB asynchronously
+                // Update note via repository
                 CoroutineScope(Dispatchers.IO).launch {
-                    val db = NoteDatabase.getDatabase(context)
-                    db.noteDao().update(note)
+                    repository.updateNote(note)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        onStarClick?.invoke()
+                    }
                 }
             }
 
@@ -81,36 +89,24 @@ class NotesAdapter(
                     }
                     .show()
 
-                // Customize buttons
                 val positiveButton =
                     dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
                 positiveButton.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.deep_blue
-                    )
+                    ContextCompat.getColor(context, R.color.deep_blue)
                 )
-
                 positiveButton.setTextColor(ContextCompat.getColor(context, R.color.white))
                 positiveButton.setPadding(40, 20, 40, 20)
 
                 val negativeButton =
                     dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
                 negativeButton.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.sticky_gray
-                    )
+                    ContextCompat.getColor(context, R.color.sticky_gray)
                 )
                 negativeButton.setTextColor(ContextCompat.getColor(context, R.color.black))
                 negativeButton.setPadding(40, 20, 40, 20)
             }
 
-
-            // Note click
             root.setOnClickListener { onNoteClick(note) }
-
-            // Date formatting
             textDate.text = formatNoteDate(note.createdAt)
         }
     }
@@ -121,8 +117,7 @@ class NotesAdapter(
         val sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000L
         return if (diff < sevenDaysInMillis) {
             android.text.format.DateUtils.getRelativeTimeSpanString(
-                timestamp,
-                now,
+                timestamp, now,
                 android.text.format.DateUtils.DAY_IN_MILLIS,
                 android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE
             ).toString()
@@ -139,3 +134,4 @@ class NotesAdapter(
 
     override fun getItemCount() = notes.size
 }
+

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notetakingapp.R
 import com.example.notetakingapp.data.database.NoteDatabase
+import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNoteDetailBinding
 import kotlinx.coroutines.launch
 
@@ -19,12 +20,15 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     private val binding get() = _binding!!
 
     private val args: NoteDetailFragmentArgs by navArgs()
+    private lateinit var repository: NotesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoteDetailBinding.inflate(inflater, container, false)
+        val noteDao = NoteDatabase.getDatabase(requireContext()).noteDao()
+        repository = NotesRepository(noteDao)
         return binding.root
     }
 
@@ -45,13 +49,8 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     }
 
     private fun showNote() {
-        val db = NoteDatabase.getDatabase(requireContext())
-        val noteDao = db.noteDao()
-
-        val noteId = args.noteId
-
         lifecycleScope.launch {
-            val note = noteDao.show(noteId)
+            val note = repository.getNoteById(args.noteId)
             note?.let {
                 binding.noteTitle.text = it.title
                 binding.noteBody.text = it.body

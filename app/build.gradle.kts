@@ -64,7 +64,7 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.9.3")
 
 //    material design setup
-    implementation("com.google.android.material:material:1.14.0-alpha03")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.cardview:cardview:1.0.0")
 
 //    default setup

@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.notetakingapp.R
 import com.example.notetakingapp.data.database.NoteDatabase
+import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentSettingsBinding
 import kotlinx.coroutines.launch
 
@@ -17,9 +18,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var repository: NotesRepository
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
+
+        val db = NoteDatabase.getDatabase(requireContext())
+        repository = NotesRepository(db.noteDao())
+
         fetchNoteCounts()
 
         binding.logOutBtn.setOnClickListener {
@@ -52,12 +59,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun fetchNoteCounts() {
-        val db = NoteDatabase.getDatabase(requireContext())
-        val noteDao = db.noteDao()
-
         viewLifecycleOwner.lifecycleScope.launch {
-            val totalNotes = noteDao.countAllNotes()
-            val starredNotes = noteDao.countStarredNotes()
+            val totalNotes = repository.countAllNotes()
+            val starredNotes = repository.countStarredNotes()
 
             binding.tvNotesCount.text = totalNotes.toString()
             binding.tvStarredCount.text = starredNotes.toString()
@@ -72,10 +76,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val isOpen = openCard.isVisible
         openCard.visibility = if (isOpen) View.GONE else View.VISIBLE
 
-        // Animate the arrow rotation
         openArrow.animate().rotation(if (isOpen) 0f else 90f).setDuration(200).start()
 
-        // Close all other cards and reset their arrows
         others.forEach { (card, arrow) ->
             card.visibility = View.GONE
             arrow.animate().rotation(0f).setDuration(200).start()

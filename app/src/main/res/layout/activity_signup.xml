@@ -8,8 +8,9 @@
 
   <ImageView
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:src="@drawable/note_logo"
+    android:layout_height="200dp"
+    android:contentDescription="App Logo"
+    android:src="@drawable/app_logo"
     app:layout_constraintBottom_toTopOf="@id/signUpCard" />
 
   <androidx.cardview.widget.CardView

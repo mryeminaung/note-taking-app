@@ -40,26 +40,40 @@
       android:layout_marginTop="16dp"
       android:gravity="center"
       android:lineSpacingExtra="4dp"
-      android:text="Organize your thoughts. Prioritize your ideas. Stay productive."
+      android:text="Organize your thoughts. Prioritize your ideas."
       android:textAlignment="center"
       android:textColor="@color/white"
       android:textSize="16sp" />
 
+    <TextView
+      android:id="@+id/descriptionText2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:lineSpacingExtra="4dp"
+      android:text="Stay productive."
+      android:textAlignment="center"
+      android:textColor="@color/white"
+      android:textSize="16sp" />
+
+    <!-- Illustration -->
     <ImageView
       android:layout_width="match_parent"
       android:layout_height="350dp"
-      android:scaleType="centerCrop"
-      android:src="@drawable/note_logo" />
+      android:layout_marginTop="24dp"
+      android:contentDescription="App logo"
+      android:scaleType="fitCenter"
+      android:src="@drawable/app_logo" />
 
     <!-- Buttons -->
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="24dp"
       android:gravity="center"
-      android:orientation="vertical"
-      android:paddingHorizontal="15dp">
+      android:orientation="vertical">
 
+      <!-- Primary Action -->
       <com.google.android.material.button.MaterialButton
         android:id="@+id/signupBtn"
         android:layout_width="match_parent"
@@ -67,21 +81,28 @@
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/deep_blue"
         android:paddingVertical="15dp"
-        android:text="Create Account"
+        android:text="Get Started"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:cornerRadius="30dp" />
+        app:cornerRadius="30dp"
+        app:icon="@drawable/ic_arrow_forward"
+        app:iconGravity="textEnd"
+        app:iconPadding="8dp"
+        app:iconTint="@android:color/white" />
 
-      <com.google.android.material.button.MaterialButton
+      <!-- Secondary Action (Login Text) -->
+      <TextView
         android:id="@+id/loginBtn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#D1D5DB"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:paddingVertical="15dp"
-        android:text="Log In"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:cornerRadius="30dp" />
+        android:text="Already have an account?"
+        android:textColor="@color/deep_blue"
+        android:textSize="14sp"
+        android:textStyle="bold" />
     </LinearLayout>
   </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

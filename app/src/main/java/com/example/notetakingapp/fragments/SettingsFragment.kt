@@ -1,12 +1,11 @@
 package com.example.notetakingapp.fragments
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -69,16 +68,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.darkCard.setOnClickListener {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             saveThemePreference("dark")
+            highlightSelectedTheme("dark")
         }
 
         binding.lightCard.setOnClickListener {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             saveThemePreference("light")
+            highlightSelectedTheme("light")
         }
 
         binding.sysCard.setOnClickListener {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
             saveThemePreference("system")
+            highlightSelectedTheme("system")
         }
 
         loadThemePreference()
@@ -99,50 +101,27 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         highlightSelectedTheme(prefs.getString("theme_mode", "system"))
     }
 
-    @SuppressLint("ResourceAsColor")
     private fun highlightSelectedTheme(mode: String?) {
-        // Reset all cards to white
-        binding.darkCard.setBackgroundColor(R.color.white)
-        binding.lightCard.setBackgroundColor(R.color.white)
-        binding.sysCard.setBackgroundColor(R.color.white)
-
-        // Reset icons tint to transparent
-        binding.iconMoon.backgroundTintList = ColorStateList.valueOf(
-            android.R.color.transparent
-        )
-        binding.iconSun.backgroundTintList = ColorStateList.valueOf(
-            android.R.color.transparent
-        )
-        binding.iconSys.backgroundTintList = ColorStateList.valueOf(
-            android.R.color.transparent
-        )
+        val stickyGray = ContextCompat.getColor(requireContext(), R.color.sticky_gray)
+        val white = ContextCompat.getColor(requireContext(), R.color.white)
 
         when (mode) {
             "dark" -> {
-                binding.darkCard.setBackgroundColor(
-                    R.color.sticky_gray
-                )
-                binding.iconMoon.backgroundTintList = ColorStateList.valueOf(
-                    R.color.white
-                )
+                binding.darkCard.setBackgroundColor(white)
+                binding.lightCard.setBackgroundColor(stickyGray)
+                binding.sysCard.setBackgroundColor(stickyGray)
             }
 
             "light" -> {
-                binding.lightCard.setBackgroundColor(
-                    R.color.sticky_gray
-                )
-                binding.iconSun.backgroundTintList = ColorStateList.valueOf(
-                    R.color.white
-                )
+                binding.lightCard.setBackgroundColor(white)
+                binding.darkCard.setBackgroundColor(stickyGray)
+                binding.sysCard.setBackgroundColor(stickyGray)
             }
 
             "system" -> {
-                binding.sysCard.setBackgroundColor(
-                    R.color.sticky_gray
-                )
-                binding.iconSys.backgroundTintList = ColorStateList.valueOf(
-                    R.color.white
-                )
+                binding.sysCard.setBackgroundColor(white)
+                binding.darkCard.setBackgroundColor(stickyGray)
+                binding.lightCard.setBackgroundColor(stickyGray)
             }
         }
     }

@@ -216,7 +216,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/theme_card"
             android:visibility="gone"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp">
@@ -227,13 +227,27 @@
               android:orientation="vertical"
               android:padding="10dp">
 
-              <EditText
+              <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/setting_input_bg"
+                android:layout_marginBottom="10dp"
                 android:hint="Enter Username"
-                android:padding="10dp"
-                android:textSize="16sp" />
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/deep_blue"
+                app:hintTextColor="@color/deep_blue">
+
+                <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/usernameEditText"
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:inputType="textPersonName"
+                  android:padding="12dp" />
+              </com.google.android.material.textfield.TextInputLayout>
 
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/usernameUpdateBtn"
@@ -244,7 +258,7 @@
                 android:backgroundTint="@color/deep_blue"
                 android:text="Update"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:cornerRadius="30dp" />
             </LinearLayout>
           </androidx.cardview.widget.CardView>
@@ -282,7 +296,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/theme_card"
             android:visibility="gone"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp">
@@ -293,22 +307,52 @@
               android:orientation="vertical"
               android:padding="10dp">
 
-              <EditText
+              <!-- Old Password -->
+              <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/setting_input_bg"
                 android:hint="Old Password"
-                android:padding="10dp"
-                android:textSize="16sp" />
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/deep_blue"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/deep_blue">
 
-              <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/oldPasswordEditText"
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:inputType="textPassword"
+                  android:padding="12dp" />
+              </com.google.android.material.textfield.TextInputLayout>
+
+              <!-- New Password -->
+              <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/setting_input_bg"
                 android:hint="New Password"
-                android:padding="10dp"
-                android:textSize="16sp" />
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/deep_blue"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/deep_blue">
+
+                <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/newPasswordEditText"
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:inputType="textPassword"
+                  android:padding="12dp" />
+              </com.google.android.material.textfield.TextInputLayout>
 
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/changePwdBtn"
@@ -319,7 +363,7 @@
                 android:backgroundTint="@color/deep_blue"
                 android:text="Change"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:cornerRadius="30dp" />
             </LinearLayout>
           </androidx.cardview.widget.CardView>
@@ -335,8 +379,7 @@
           <!-- Theme Preference -->
           <LinearLayout
             android:id="@+id/rowChangeTheme"
-            style="@style/SettingRow"
-            android:layout_marginBottom="10dp">
+            style="@style/SettingRow">
 
             <ImageView
               style="@style/SettingRowIcon"
@@ -358,10 +401,9 @@
           android:id="@+id/themeCard"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginHorizontal="10dp"
-          android:layout_marginBottom="10dp"
+          android:layout_marginBottom="15dp"
           android:backgroundTint="@color/theme_card"
-          android:visibility="visible"
+          android:visibility="gone"
           app:cardCornerRadius="12dp"
           app:cardElevation="2dp">
 
@@ -400,7 +442,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginTop="4dp"
                   android:text="Dark"
-                  android:textColor="@color/white"
+                  android:textColor="@color/black"
                   android:textSize="12sp" />
               </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -433,7 +475,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginTop="4dp"
                   android:text="System"
-                  android:textColor="@color/white"
+                  android:textColor="@color/black"
                   android:textSize="12sp" />
               </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -466,7 +508,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginTop="4dp"
                   android:text="Light"
-                  android:textColor="@color/white"
+                  android:textColor="@color/black"
                   android:textSize="12sp" />
               </LinearLayout>
             </androidx.cardview.widget.CardView>

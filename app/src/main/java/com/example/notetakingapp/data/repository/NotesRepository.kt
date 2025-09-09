@@ -20,4 +20,12 @@ class NotesRepository(private val noteDao: NoteDao) {
     suspend fun countStarredNotes(): Int = noteDao.countStarredNotes()
 
     suspend fun getStarredNotes(): List<Note> = noteDao.getStarredNotes()
+
+    suspend fun searchNotes(query: String): List<Note> {
+        return noteDao.searchNotes(query)
+    }
+
+    suspend fun searchStarredNotes(query: String): List<Note> {
+        return noteDao.searchStarredNotes(query)
+    }
 }

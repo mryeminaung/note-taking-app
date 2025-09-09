@@ -69,7 +69,6 @@ class NotesAdapter(
                 anim.duration = 150
                 iconStar.startAnimation(anim)
 
-                // Update note via repository
                 CoroutineScope(Dispatchers.IO).launch {
                     repository.updateNote(note)
                     CoroutineScope(Dispatchers.Main).launch {

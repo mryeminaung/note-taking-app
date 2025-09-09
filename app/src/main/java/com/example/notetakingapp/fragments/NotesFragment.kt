@@ -2,6 +2,7 @@ package com.example.notetakingapp.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -44,6 +45,15 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
 
         binding.noteTabs.getTabAt(0)?.select()
         getAllNotes()
+
+        binding.noteSearch.addTextChangedListener { editable ->
+            val query = editable.toString()
+            if (query.isEmpty()) {
+                refreshCurrentTab()
+            } else {
+                searchNotes(query)
+            }
+        }
 
         binding.noteTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -118,6 +128,37 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             refreshCurrentTab()
         }
     }
+
+    private fun searchNotes(query: String) {
+        binding.loadingSpinner.visibility = View.VISIBLE
+        binding.notesContainer.visibility = View.GONE
+        binding.emptyState.visibility = View.GONE
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val notes = when (binding.noteTabs.selectedTabPosition) {
+                0 -> repository.searchNotes(query)          // All Notes
+                1 -> repository.searchStarredNotes(query)   // Starred Notes
+                else -> emptyList()
+            }
+
+            adapter.updateNotes(notes)
+            binding.loadingSpinner.visibility = View.GONE
+
+            if (notes.isEmpty()) {
+                val tabName =
+                    if (binding.noteTabs.selectedTabPosition == 0) "notes" else "starred notes"
+                binding.emptyText.text = "No $tabName found for \"$query\""
+                binding.emptyText.visibility = View.VISIBLE
+                binding.notesContainer.visibility = View.GONE
+                binding.emptyState.visibility = View.GONE
+            } else {
+                binding.emptyText.visibility = View.GONE
+                binding.emptyState.visibility = View.GONE
+                binding.notesContainer.visibility = View.VISIBLE
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

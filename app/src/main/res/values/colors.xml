@@ -63,4 +63,5 @@
   <color name="summary_text">#000000</color>
   <color name="auth_btn">#052659</color>
   <color name="theme_card">#FFFFFF</color>
+  <color name="dialog_bg">#FFFFFF</color>
 </resources>

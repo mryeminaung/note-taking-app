@@ -13,6 +13,9 @@ import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNoteDetailBinding
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
@@ -54,8 +57,37 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
             note?.let {
                 binding.noteTitle.text = it.title
                 binding.noteBody.text = it.body
+                binding.noteCreatedAt.text = formatNoteDate(it.createdAt)
                 binding.noteDetailContainer.setBackgroundColor(it.bgColor)
+
+                val colorRes = when (it.priority.lowercase()) {
+                    "high" -> R.color.rainbow_red
+                    "medium" -> R.color.rainbow_orange
+                    "low" -> R.color.rainbow_green
+                    else -> R.color.sticky_gray
+                }
+
+                binding.priorityIndicator.setColorFilter(
+                    requireContext().getColor(colorRes),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
             }
+        }
+    }
+
+    private fun formatNoteDate(timestamp: Long): String {
+        val now = System.currentTimeMillis()
+        val diff = now - timestamp
+        val sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000L
+        return if (diff < sevenDaysInMillis) {
+            android.text.format.DateUtils.getRelativeTimeSpanString(
+                timestamp, now,
+                android.text.format.DateUtils.DAY_IN_MILLIS,
+                android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE
+            ).toString()
+        } else {
+            val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            sdf.format(Date(timestamp))
         }
     }
 

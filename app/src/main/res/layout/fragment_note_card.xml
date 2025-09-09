@@ -28,6 +28,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:ellipsize="end"
+        android:scrollHorizontally="false"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -35,8 +38,8 @@
       <!-- Right icons -->
       <ImageView
         android:id="@+id/icon_star"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginStart="15dp"
         android:contentDescription="Star icon"
         android:src="@drawable/ic_star" />
@@ -48,6 +51,10 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="4dp"
       android:layout_marginBottom="15dp"
+      android:ellipsize="end"
+      android:maxLines="2"
+      android:scrollHorizontally="false"
+      android:singleLine="false"
       android:text=""
       android:textColor="@color/black"
       android:textSize="14sp" />
@@ -107,7 +114,7 @@
           android:id="@+id/priorityIndicator"
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:layout_marginEnd="12dp"
+          android:layout_marginEnd="15dp"
           android:contentDescription="Error icon"
           android:src="@drawable/ic_error" />
 
@@ -116,8 +123,7 @@
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:contentDescription="Delete icon"
-          android:src="@drawable/ic_delete"
-          android:tint="@color/rainbow_red" />
+          android:src="@drawable/ic_delete_forever" />
       </LinearLayout>
     </LinearLayout>
 

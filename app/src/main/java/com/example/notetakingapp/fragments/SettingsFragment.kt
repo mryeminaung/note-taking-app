@@ -1,8 +1,13 @@
 package com.example.notetakingapp.fragments
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +38,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             findNavController().navigate(R.id.action_settingsFragment_to_loginActivity)
         }
 
+        changeTheme()
+
         binding.rowChangeUsername.setOnClickListener {
             toggleAccordion(
                 binding.userNameCard, binding.userNameArrow,
@@ -55,6 +62,88 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 binding.userNameCard to binding.userNameArrow,
                 binding.pwdCard to binding.pwdArrow
             )
+        }
+    }
+
+    private fun changeTheme() {
+        binding.darkCard.setOnClickListener {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            saveThemePreference("dark")
+        }
+
+        binding.lightCard.setOnClickListener {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            saveThemePreference("light")
+        }
+
+        binding.sysCard.setOnClickListener {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            saveThemePreference("system")
+        }
+
+        loadThemePreference()
+    }
+
+    private fun saveThemePreference(mode: String) {
+        val prefs = requireContext().getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
+        prefs.edit { putString("theme_mode", mode) }
+    }
+
+    private fun loadThemePreference() {
+        val prefs = requireContext().getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
+        when (prefs.getString("theme_mode", "system")) {
+            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "system" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
+        highlightSelectedTheme(prefs.getString("theme_mode", "system"))
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun highlightSelectedTheme(mode: String?) {
+        // Reset all cards to white
+        binding.darkCard.setBackgroundColor(R.color.white)
+        binding.lightCard.setBackgroundColor(R.color.white)
+        binding.sysCard.setBackgroundColor(R.color.white)
+
+        // Reset icons tint to transparent
+        binding.iconMoon.backgroundTintList = ColorStateList.valueOf(
+            android.R.color.transparent
+        )
+        binding.iconSun.backgroundTintList = ColorStateList.valueOf(
+            android.R.color.transparent
+        )
+        binding.iconSys.backgroundTintList = ColorStateList.valueOf(
+            android.R.color.transparent
+        )
+
+        when (mode) {
+            "dark" -> {
+                binding.darkCard.setBackgroundColor(
+                    R.color.sticky_gray
+                )
+                binding.iconMoon.backgroundTintList = ColorStateList.valueOf(
+                    R.color.white
+                )
+            }
+
+            "light" -> {
+                binding.lightCard.setBackgroundColor(
+                    R.color.sticky_gray
+                )
+                binding.iconSun.backgroundTintList = ColorStateList.valueOf(
+                    R.color.white
+                )
+            }
+
+            "system" -> {
+                binding.sysCard.setBackgroundColor(
+                    R.color.sticky_gray
+                )
+                binding.iconSys.backgroundTintList = ColorStateList.valueOf(
+                    R.color.white
+                )
+            }
         }
     }
 

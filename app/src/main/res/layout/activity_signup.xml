@@ -4,46 +4,44 @@
   android:id="@+id/main"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@drawable/splash_bg">
-
-  <ImageView
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:contentDescription="App Logo"
-    android:src="@drawable/app_logo"
-    app:layout_constraintBottom_toTopOf="@id/signUpCard" />
+  android:background="@drawable/splash_bg"
+  android:paddingHorizontal="10dp">
 
   <androidx.cardview.widget.CardView
     android:id="@+id/signUpCard"
     android:layout_width="match_parent"
-    android:layout_height="700dp"
-    android:layout_marginBottom="-30dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/welcome_card"
-    app:cardCornerRadius="30dp"
-    app:layout_constraintBottom_toBottomOf="parent">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="5dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
       android:id="@+id/rad"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"
-      android:background="@android:color/white"
-      android:backgroundTint="@android:color/white"
-      android:clipToOutline="true"
-      android:elevation="6dp"
+      android:background="@color/app_bg"
+      android:elevation="1dp"
       android:orientation="vertical"
-      android:paddingHorizontal="30dp"
-      android:paddingBottom="60dp"
+      android:paddingHorizontal="15dp"
+      android:paddingTop="10dp"
+      android:paddingBottom="30dp"
       android:shape="rectangle">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:src="@drawable/app_logo" />
 
       <!-- Title -->
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
         android:text="Create Your Account"
-        android:textColor="#111827"
+        android:textColor="@color/app_text"
         android:textSize="25sp"
         android:textStyle="bold" />
 
@@ -62,7 +60,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:hint="Full Name"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="16dp"
@@ -87,7 +85,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:hint="Email"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="16dp"
@@ -112,7 +110,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:hint="Password"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="16dp"
@@ -166,20 +164,23 @@
         android:id="@+id/signUpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/deep_blue"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/auth_btn"
         android:paddingVertical="15dp"
         android:text="Sign Up"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="15sp"
-        app:cornerRadius="30dp" />
+        app:cornerRadius="30dp"
+        app:icon="@drawable/ic_signup"
+        app:iconGravity="textEnd"
+        app:iconPadding="8dp"
+        app:iconTint="@android:color/white" />
 
       <!-- Divider -->
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -207,6 +208,7 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -220,6 +222,7 @@
           <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/floating_bg"
             android:padding="6dp"
             android:scaleType="fitCenter"
             android:src="@drawable/facebook_logo" />
@@ -235,6 +238,7 @@
           <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/floating_bg"
             android:padding="6dp"
             android:scaleType="fitCenter"
             android:src="@drawable/google_logo" />
@@ -250,6 +254,7 @@
           <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/floating_bg"
             android:padding="6dp"
             android:scaleType="fitCenter"
             android:src="@drawable/twitter_logo" />

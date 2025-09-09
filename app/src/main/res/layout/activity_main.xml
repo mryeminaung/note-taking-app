@@ -20,13 +20,19 @@
     app:layout_constraintTop_toTopOf="parent"
     app:navGraph="@navigation/main_nav_graph" />
 
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@color/bottom_top"
+    app:layout_constraintBottom_toTopOf="@+id/bottomNav" />
+
   <!-- BottomNavigationView fixed at bottom -->
   <com.google.android.material.bottomnavigation.BottomNavigationView
     android:id="@+id/bottomNav"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_nav_bg"
-    app:itemIconTint="@color/deep_blue"
+    app:itemIconTint="@color/bottom_nav"
     app:itemTextAppearanceActive="@style/BottomNavigationActiveText"
     app:itemTextAppearanceInactive="@style/BottomNavigationInactiveText"
     app:labelVisibilityMode="auto"

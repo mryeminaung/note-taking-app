@@ -9,7 +9,7 @@
     android:label="@string/app_name"
     android:roundIcon="@drawable/app_logo"
     android:supportsRtl="true"
-    android:theme="@style/Theme.NoteTakingapp">
+    android:theme="@style/Base.Theme.NoteTakingapp">
     <activity
       android:name=".MainActivity"
       android:exported="true"

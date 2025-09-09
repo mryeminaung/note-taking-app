@@ -52,6 +52,7 @@ dependencies {
 //    firebase setup
     implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
     implementation("com.google.firebase:firebase-analytics-ktx:22.5.0")
+    implementation("com.google.firebase:firebase-auth")
 
 //    Room database setup
     val room_version = "2.7.2"

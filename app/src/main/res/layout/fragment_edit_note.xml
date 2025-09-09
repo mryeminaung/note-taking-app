@@ -20,11 +20,11 @@
     android:scaleX="1.3"
     android:scaleY="1.3"
     android:src="@drawable/ic_save_edit"
-    app:backgroundTint="@android:color/white"
+    app:backgroundTint="@color/floating_bg"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-    app:strokeColor="@color/deep_blue"
+    app:strokeColor="@color/floating_stroke"
     app:strokeWidth="1dp" />
 
   <LinearLayout
@@ -42,6 +42,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Back"
+      android:textColor="@color/black"
       android:textSize="19sp"
       android:textStyle="bold"
       app:drawableStartCompat="@drawable/ic_arrow_back" />
@@ -99,6 +100,8 @@
       android:layout_marginBottom="15dp"
       android:background="@null"
       android:hint="Title"
+      android:textColor="@color/black"
+      android:textColorHint="@color/note_hint"
       android:textSize="25sp"
       android:textStyle="bold" />
 
@@ -108,6 +111,8 @@
       android:layout_height="wrap_content"
       android:background="@null"
       android:hint="Note something down..."
+      android:textColor="@color/black"
+      android:textColorHint="@color/note_hint"
       android:textSize="16sp" />
   </LinearLayout>
 

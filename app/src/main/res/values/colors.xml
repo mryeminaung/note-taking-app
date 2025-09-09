@@ -16,8 +16,6 @@
   <color name="text_dark">#FFFFFF</color>
   <color name="text_system">#000000</color>
 
-
-  <!--  sticky notes color-->
   <color name="sticky_yellow">#FFF9C4</color>   <!-- Soft pastel yellow -->
   <color name="sticky_blue">#BBDEFB</color>     <!-- Light pastel blue -->
   <color name="sticky_green">#C8E6C9</color>    <!-- Soft mint green -->
@@ -42,7 +40,6 @@
 
   <!-- app main colors-->
   <color name="very_dark_navy">#021024</color>
-  <color name="deep_blue">#052659</color>
   <color name="muted_teal_blue">#548383</color>
   <color name="soft_blue">#7DA0CA</color>
   <color name="light_sky_blue">#C1E8FF</color>
@@ -53,4 +50,17 @@
   <color name="nav_bar_dark">#121212</color>
   <color name="status_bar_dark">#121212</color>
 
+  <color name="app_bg">#FFFFFF</color>
+  <color name="app_text">#000000</color>
+  <color name="bottom_nav">#052659</color>
+  <color name="bottom_top">#052659</color>
+  <color name="deep_blue">#052659</color>
+  <color name="floating_bg">#FFFFFF</color>
+  <color name="floating_stroke">#052659</color>
+  <color name="filter_icon">#000000</color>
+  <color name="note_hint">#FFFFFF</color>
+  <color name="summary_card">#FFFFFF</color>
+  <color name="summary_text">#000000</color>
+  <color name="auth_btn">#052659</color>
+  <color name="theme_card">#FFFFFF</color>
 </resources>

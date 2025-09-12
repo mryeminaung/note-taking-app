@@ -79,7 +79,7 @@ class NotesAdapter(
 
             iconDelete.setOnClickListener {
                 val dialog = MaterialAlertDialogBuilder(context, R.style.CustomMaterialDialog)
-                    .setTitle("\uD83D\uDDD1\uFE0F Delete Note?")
+                    .setTitle("Delete Note?")
                     .setMessage("Are you sure you want to delete this note?")
                     .setNegativeButton("No") { d, _ -> d.dismiss() }
                     .setPositiveButton("Yes") { d, _ ->

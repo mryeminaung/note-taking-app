@@ -22,7 +22,7 @@
 
   <View
     android:layout_width="match_parent"
-    android:layout_height="2dp"
+    android:layout_height="1dp"
     android:background="@color/bottom_top"
     app:layout_constraintBottom_toTopOf="@+id/bottomNav" />
 
@@ -32,6 +32,9 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_nav_bg"
+    android:backgroundTint="@color/white"
+    app:itemActiveIndicatorStyle="@android:color/white"
+    app:itemIconSize="25dp"
     app:itemIconTint="@color/bottom_nav"
     app:itemTextAppearanceActive="@style/BottomNavigationActiveText"
     app:itemTextAppearanceInactive="@style/BottomNavigationInactiveText"

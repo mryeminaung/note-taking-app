@@ -1,7 +1,9 @@
 package com.example.notetakingapp.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +15,7 @@ import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.data.models.Note
 import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNotesBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
@@ -45,6 +48,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
 
         binding.noteTabs.getTabAt(0)?.select()
         getAllNotes()
+        sortMenu()
 
         binding.noteSearch.addTextChangedListener { editable ->
             val query = editable.toString()
@@ -78,6 +82,58 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             1 -> getStarredNotes()
         }
     }
+
+    private var selectedIndex = 0 // default selection
+
+    private fun sortMenu() {
+        binding.sortBtn.setOnClickListener {
+            val items = arrayOf("Default", "Priority", "Date")
+
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Sort by")
+                .setSingleChoiceItems(items, selectedIndex) { _, which ->
+                    selectedIndex = which
+                }
+                .setPositiveButton("OK") { dialog, _ ->
+                    when (selectedIndex) {
+                        0 -> { /* Sort default */
+                        }
+
+                        1 -> { /* Sort by priority */
+                        }
+
+                        2 -> { /* Sort by date */
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue
+                )
+            )
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            positiveButton.setPadding(40, 20, 40, 20)
+
+            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.sticky_gray
+                )
+            )
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            negativeButton.setPadding(40, 20, 40, 20)
+        }
+    }
+
 
     private fun getAllNotes() {
         binding.loadingSpinner.visibility = View.VISIBLE
@@ -158,7 +214,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_notes -> {
-                    // Navigate to notesFragment from **anywhere**
                     if (navController.currentDestination?.id != R.id.notesFragment) {
                         navController.navigate(R.id.notesFragment)
                     }
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_settings -> {
-                    // Navigate to settingsFragment from **anywhere**
                     if (navController.currentDestination?.id != R.id.settingsFragment) {
                         navController.navigate(R.id.settingsFragment)
                     }

@@ -3,24 +3,22 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/main"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@drawable/splash_bg"
-  android:padding="24dp">
+  android:layout_height="match_parent">
 
-  <!-- Center container -->
   <LinearLayout
     android:id="@+id/centerContainer"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
     android:gravity="center"
     android:orientation="vertical"
+    android:paddingHorizontal="20dp"
     android:paddingVertical="30dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Title -->
     <TextView
       android:id="@+id/titleText"
       android:layout_width="wrap_content"
@@ -28,11 +26,10 @@
       android:gravity="center"
       android:letterSpacing="0.02"
       android:text="Note Taking App"
-      android:textColor="@color/white"
+      android:textColor="@color/app_text"
       android:textSize="30sp"
       android:textStyle="bold" />
 
-    <!-- Description -->
     <TextView
       android:id="@+id/descriptionText"
       android:layout_width="wrap_content"
@@ -40,23 +37,11 @@
       android:layout_marginTop="16dp"
       android:gravity="center"
       android:lineSpacingExtra="4dp"
-      android:text="Organize your thoughts. Prioritize your ideas."
+      android:text="Organize your thoughts. Prioritize your ideas.\nStay productive."
       android:textAlignment="center"
-      android:textColor="@color/white"
+      android:textColor="@color/app_text"
       android:textSize="16sp" />
 
-    <TextView
-      android:id="@+id/descriptionText2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      android:lineSpacingExtra="4dp"
-      android:text="Stay productive."
-      android:textAlignment="center"
-      android:textColor="@color/white"
-      android:textSize="16sp" />
-
-    <!-- Illustration -->
     <ImageView
       android:layout_width="match_parent"
       android:layout_height="350dp"
@@ -65,7 +50,6 @@
       android:scaleType="fitCenter"
       android:src="@drawable/app_logo" />
 
-    <!-- Buttons -->
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -73,31 +57,29 @@
       android:gravity="center"
       android:orientation="vertical">
 
-      <!-- Primary Action -->
       <com.google.android.material.button.MaterialButton
         android:id="@+id/signupBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/deep_blue"
+        android:backgroundTint="@color/auth_btn"
         android:paddingVertical="15dp"
         android:text="Get Started"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
         app:cornerRadius="30dp"
         app:icon="@drawable/ic_arrow_forward"
         app:iconGravity="textEnd"
         app:iconPadding="8dp"
         app:iconTint="@android:color/white" />
 
-      <!-- Secondary Action (Login Text) -->
       <TextView
         android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
         android:paddingVertical="15dp"
         android:text="Already have an account?"
         android:textColor="@color/deep_blue"

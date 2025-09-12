@@ -26,7 +26,7 @@
       android:id="@+id/profileHeader"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="-200dp"
+      android:layout_marginTop="-220dp"
       android:gravity="center"
       android:orientation="vertical">
 
@@ -65,19 +65,17 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="10dp"
       android:layout_marginTop="20dp"
-      android:background="@drawable/welcome_card"
       android:backgroundTint="@color/app_bg"
-      app:cardCornerRadius="20dp"
-      app:cardElevation="5dp">
+      app:cardCornerRadius="@dimen/auth_card_radius"
+      app:cardElevation="3dp">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="20dp"
-        android:paddingTop="15dp">
+        android:paddingVertical="20dp">
 
-        <!-- Notes Summary -->
         <TextView
           android:id="@+id/tvNotesSummary"
           android:layout_width="wrap_content"
@@ -88,13 +86,11 @@
           android:textSize="16sp"
           android:textStyle="bold" />
 
-        <!-- Notes and Starred Cards -->
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal">
 
-          <!-- Notes Card -->
           <androidx.cardview.widget.CardView
             android:id="@+id/notesCard"
             android:layout_width="0dp"
@@ -214,7 +210,6 @@
             android:id="@+id/userNameCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
             android:backgroundTint="@color/theme_card"
             android:visibility="gone"
@@ -234,10 +229,10 @@
                 android:layout_marginBottom="10dp"
                 android:hint="Enter Username"
                 app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+                app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+                app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+                app:boxCornerRadiusTopStart="@dimen/form_input_radius"
                 app:boxStrokeColor="@color/deep_blue"
                 app:hintTextColor="@color/deep_blue">
 
@@ -294,7 +289,6 @@
             android:id="@+id/pwdCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
             android:backgroundTint="@color/theme_card"
             android:visibility="gone"
@@ -314,10 +308,10 @@
                 android:layout_height="wrap_content"
                 android:hint="Old Password"
                 app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+                app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+                app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+                app:boxCornerRadiusTopStart="@dimen/form_input_radius"
                 app:boxStrokeColor="@color/deep_blue"
                 app:endIconMode="password_toggle"
                 app:hintTextColor="@color/deep_blue">
@@ -338,10 +332,10 @@
                 android:layout_marginTop="10dp"
                 android:hint="New Password"
                 app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+                app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+                app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+                app:boxCornerRadiusTopStart="@dimen/form_input_radius"
                 app:boxStrokeColor="@color/deep_blue"
                 app:endIconMode="password_toggle"
                 app:hintTextColor="@color/deep_blue">

@@ -38,6 +38,5 @@ interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%') AND starred = 1 ORDER BY createdAt DESC")
     suspend fun searchStarredNotes(query: String): List<Note>
-
 }
 

@@ -3,29 +3,24 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/main"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@drawable/splash_bg"
-  android:paddingHorizontal="10dp">
+  android:layout_height="match_parent">
 
   <androidx.cardview.widget.CardView
-    android:id="@+id/signUpCard"
+    android:id="@+id/loginCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/welcome_card"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="5dp"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/app_bg"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
       android:id="@+id/rad"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:background="@color/app_bg"
-      android:elevation="1dp"
       android:orientation="vertical"
-      android:paddingHorizontal="15dp"
+      android:paddingHorizontal="18dp"
       android:paddingTop="10dp"
       android:paddingBottom="30dp"
       android:shape="rectangle">
@@ -63,11 +58,12 @@
         android:layout_marginBottom="10dp"
         android:hint="Full Name"
         app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+        app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusTopStart="@dimen/form_input_radius"
         app:boxStrokeColor="@color/deep_blue"
+        app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -88,11 +84,12 @@
         android:layout_marginBottom="10dp"
         android:hint="Email"
         app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+        app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusTopStart="@dimen/form_input_radius"
         app:boxStrokeColor="@color/deep_blue"
+        app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -113,13 +110,14 @@
         android:layout_marginBottom="10dp"
         android:hint="Password"
         app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+        app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusTopStart="@dimen/form_input_radius"
         app:boxStrokeColor="@color/deep_blue"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/deep_blue"
+        app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -140,13 +138,14 @@
         android:layout_marginBottom="20dp"
         android:hint="Confirm Password"
         app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusBottomStart="@dimen/form_input_radius"
+        app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
+        app:boxCornerRadiusTopStart="@dimen/form_input_radius"
         app:boxStrokeColor="@color/deep_blue"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/deep_blue"
+        app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -262,7 +261,6 @@
 
       </LinearLayout>
 
-      <!-- Sign Up Text -->
       <TextView
         android:id="@+id/signinLink"
         android:layout_width="wrap_content"

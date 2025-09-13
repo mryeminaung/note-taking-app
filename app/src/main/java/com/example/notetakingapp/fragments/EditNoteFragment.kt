@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,8 @@ import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.data.models.Note
 import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentEditNoteBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
@@ -52,7 +55,10 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
 
     private fun loadNote() {
         lifecycleScope.launch {
-            val note = repository.getNoteById(args.noteId)
+            val note = repository.getNoteById(
+                args.noteId,
+                userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            )
             note?.let {
                 originalNote = it
                 restoreOriginalState()
@@ -92,7 +98,6 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
             }
 
             else -> {
-                // Show priority dialog before saving
                 showPriorityDialog { selectedPriority ->
                     lifecycleScope.launch {
                         originalNote?.let {
@@ -100,7 +105,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                                 title = updatedTitle,
                                 body = updatedBody,
                                 bgColor = noteBgColor,
-                                priority = selectedPriority // save selected or default
+                                priority = selectedPriority
                             )
                             repository.updateNote(updatedNote)
                             findNavController().navigateUp()
@@ -117,7 +122,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
             originalNote?.priority?.replaceFirstChar { it.uppercaseChar() } ?: "Low"
         )
 
-        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Select Note Priority")
             .setSingleChoiceItems(priorities, selectedIndex) { _, which ->
                 selectedIndex = which
@@ -132,7 +137,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
             }
             .show()
 
-        val positiveButton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -142,7 +147,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
         positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         positiveButton.setPadding(40, 20, 40, 20)
 
-        val negativeButton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+        val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
         negativeButton.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),

@@ -48,7 +48,7 @@
       android:layout_marginTop="24dp"
       android:contentDescription="App logo"
       android:scaleType="fitCenter"
-      android:src="@drawable/app_logo" />
+      android:src="@drawable/note_logo" />
 
     <LinearLayout
       android:layout_width="match_parent"

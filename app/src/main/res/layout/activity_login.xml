@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/main"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  tools:context=".auth.LoginActivity">
 
   <androidx.cardview.widget.CardView
     android:id="@+id/loginCard"
@@ -28,7 +30,7 @@
       <ImageView
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:src="@drawable/app_logo" />
+        android:src="@drawable/note_logo" />
 
       <TextView
         android:layout_width="wrap_content"
@@ -61,11 +63,12 @@
         app:boxCornerRadiusTopEnd="@dimen/form_input_radius"
         app:boxCornerRadiusTopStart="@dimen/form_input_radius"
         app:boxStrokeColor="@color/deep_blue"
+        app:boxStrokeErrorColor="@color/rainbow_red"
         app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/emailEditText"
+          android:id="@+id/userEmail"
           android:layout_width="match_parent"
           android:layout_height="50dp"
           android:drawableEnd="@drawable/ic_email"
@@ -93,7 +96,7 @@
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/passwordEditText"
+          android:id="@+id/password"
           android:layout_width="match_parent"
           android:layout_height="50dp"
           android:drawableEnd="@drawable/ic_email"
@@ -111,22 +114,37 @@
         android:textColor="@color/deep_blue"
         android:textSize="14sp" />
 
-      <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginButton"
+      <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/auth_btn"
-        android:paddingVertical="13dp"
-        android:text="Log In"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="15sp"
-        app:cornerRadius="30dp"
-        app:icon="@drawable/ic_login"
-        app:iconGravity="textEnd"
-        app:iconPadding="8dp"
-        app:iconTint="@android:color/white" />
+        android:layout_marginBottom="10dp">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/loginButton"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:backgroundTint="@color/auth_btn"
+          android:paddingVertical="13dp"
+          android:text="Log In"
+          android:textAllCaps="false"
+          android:textColor="@android:color/white"
+          android:textSize="15sp"
+          app:cornerRadius="30dp"
+          app:icon="@drawable/ic_login"
+          app:iconGravity="textEnd"
+          app:iconPadding="8dp"
+          app:iconTint="@android:color/white" />
+
+        <ProgressBar
+          android:id="@+id/loginProgress"
+          style="?android:attr/progressBarStyleSmall"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:indeterminateTint="@android:color/white"
+          android:visibility="gone" />
+      </FrameLayout>
+
 
       <!-- Divider -->
       <LinearLayout
@@ -218,7 +236,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="Don’t have an account? Sign Up"
+        android:text="Don’t have an account? Sign Up!"
         android:textColor="@color/deep_blue"
         android:textSize="14sp" />
 

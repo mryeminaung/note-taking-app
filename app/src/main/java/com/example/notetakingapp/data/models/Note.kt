@@ -11,5 +11,6 @@ data class Note(
     var starred: Boolean = false,
     var priority: String = "low",
     val bgColor: Int,
-    val createdAt: Long = System.currentTimeMillis() // default = now
+    val createdAt: Long = System.currentTimeMillis(), // default = now
+    val userId: String,
 )

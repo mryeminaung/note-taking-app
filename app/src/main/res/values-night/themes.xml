@@ -3,6 +3,7 @@
   <style name="Base.Theme.NoteTakingapp" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="android:navigationBarColor">@color/deep_blue</item>
     <item name="android:statusBarColor">@color/deep_blue</item>
+    <item name="android:windowBackground">@color/app_bg</item>
     <item name="android:windowLightNavigationBar">false</item>
     <item name="android:windowLightStatusBar">false</item>
   </style>

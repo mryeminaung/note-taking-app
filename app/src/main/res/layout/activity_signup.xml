@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/main"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  tools:context=".auth.SignUpActivity">
 
   <androidx.cardview.widget.CardView
     android:id="@+id/loginCard"
@@ -28,9 +30,8 @@
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:src="@drawable/app_logo" />
+        android:src="@drawable/note_logo" />
 
-      <!-- Title -->
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +41,6 @@
         android:textSize="25sp"
         android:textStyle="bold" />
 
-      <!-- Subtitle -->
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,7 +50,6 @@
         android:textColor="#6B7280"
         android:textSize="14sp" />
 
-      <!-- Username Field -->
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -67,16 +66,15 @@
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/nameEditText"
+          android:id="@+id/userName"
           android:layout_width="match_parent"
           android:layout_height="50dp"
           android:drawableEnd="@drawable/ic_person"
           android:drawableTint="@color/deep_blue"
-          android:inputType="textEmailAddress"
+          android:inputType="text"
           android:padding="12dp" />
       </com.google.android.material.textfield.TextInputLayout>
 
-      <!-- Email Field -->
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -93,7 +91,7 @@
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/emailEditText"
+          android:id="@+id/userEmail"
           android:layout_width="match_parent"
           android:layout_height="50dp"
           android:drawableEnd="@drawable/ic_email"
@@ -102,7 +100,6 @@
           android:padding="12dp" />
       </com.google.android.material.textfield.TextInputLayout>
 
-      <!-- Password Field -->
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -121,7 +118,7 @@
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/passwordEditText"
+          android:id="@+id/password"
           android:layout_width="match_parent"
           android:layout_height="50dp"
           android:drawableEnd="@drawable/ic_email"
@@ -130,7 +127,6 @@
           android:padding="12dp" />
       </com.google.android.material.textfield.TextInputLayout>
 
-      <!-- Password Field -->
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -149,7 +145,7 @@
         app:startIconTint="@color/deep_blue">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/passwordConfirmEditText"
+          android:id="@+id/passwordConfirm"
           android:layout_width="match_parent"
           android:layout_height="50dp"
           android:drawableEnd="@drawable/ic_email"
@@ -158,23 +154,37 @@
           android:padding="12dp" />
       </com.google.android.material.textfield.TextInputLayout>
 
-      <!-- Signup Button -->
-      <com.google.android.material.button.MaterialButton
-        android:id="@+id/signUpButton"
+      <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/auth_btn"
-        android:paddingVertical="15dp"
-        android:text="Sign Up"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="15sp"
-        app:cornerRadius="30dp"
-        app:icon="@drawable/ic_signup"
-        app:iconGravity="textEnd"
-        app:iconPadding="8dp"
-        app:iconTint="@android:color/white" />
+        android:layout_marginBottom="10dp">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/signUpButton"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:backgroundTint="@color/auth_btn"
+          android:paddingVertical="15dp"
+          android:text="Sign Up"
+          android:textAllCaps="false"
+          android:textColor="@android:color/white"
+          android:textSize="15sp"
+          app:cornerRadius="30dp"
+          app:icon="@drawable/ic_signup"
+          app:iconGravity="textEnd"
+          app:iconPadding="8dp"
+          app:iconTint="@android:color/white" />
+
+        <!-- ProgressBar overlay -->
+        <ProgressBar
+          android:id="@+id/signUpProgress"
+          style="?android:attr/progressBarStyleSmall"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:visibility="gone" />
+      </FrameLayout>
+
 
       <!-- Divider -->
       <LinearLayout
@@ -267,7 +277,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="Already have an account? Sign In"
+        android:text="Already have an account? Log In"
         android:textColor="@color/deep_blue"
         android:textSize="14sp" />
 

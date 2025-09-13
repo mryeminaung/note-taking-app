@@ -7,6 +7,10 @@
     <item name="android:windowBackground">@color/app_bg</item>
     <item name="backgroundTint">@color/deep_blue</item>
 
+    <!-- Apply to all text -->
+    <item name="android:fontFamily">@font/app_font</item>
+    <item name="fontFamily">@font/app_font</item>
+
     <!-- Black text/icons in Light Mode -->
     <item name="android:windowLightStatusBar">true</item>
   </style>

@@ -5,9 +5,19 @@ import com.example.notetakingapp.data.models.Note
 
 class NotesRepository(private val noteDao: NoteDao) {
 
-    suspend fun getAllNotes(): List<Note> = noteDao.index()
+    // -----------------------------
+    // Normal Notes
+    // -----------------------------
+    suspend fun getAllNotes(userId: String, sortType: String = "default"): List<Note> {
+        return when (sortType.lowercase()) {
+            "priority" -> noteDao.indexByPriority(userId)
+            "date" -> noteDao.indexByDate(userId)
+            else -> noteDao.indexDefault(userId)
+        }
+    }
 
-    suspend fun getNoteById(id: Int): Note? = noteDao.show(id)
+    suspend fun getNoteById(id: Int, userId: String): Note? =
+        noteDao.show(id, userId)
 
     suspend fun insertNote(note: Note) = noteDao.insert(note)
 
@@ -15,17 +25,47 @@ class NotesRepository(private val noteDao: NoteDao) {
 
     suspend fun deleteNote(note: Note) = noteDao.delete(note)
 
-    suspend fun countAllNotes(): Int = noteDao.countAllNotes()
+    suspend fun countAllNotes(userId: String): Int =
+        noteDao.countAllNotes(userId)
 
-    suspend fun countStarredNotes(): Int = noteDao.countStarredNotes()
-
-    suspend fun getStarredNotes(): List<Note> = noteDao.getStarredNotes()
-
-    suspend fun searchNotes(query: String): List<Note> {
-        return noteDao.searchNotes(query)
+    // -----------------------------
+    // Starred Notes
+    // -----------------------------
+    suspend fun getStarredNotes(userId: String, sortType: String = "default"): List<Note> {
+        return when (sortType.lowercase()) {
+            "priority" -> noteDao.getStarredNotesByPriority(userId)
+            "date" -> noteDao.getStarredNotesByDate(userId)
+            else -> noteDao.getStarredNotesDefault(userId)
+        }
     }
 
-    suspend fun searchStarredNotes(query: String): List<Note> {
-        return noteDao.searchStarredNotes(query)
+    suspend fun countStarredNotes(userId: String): Int =
+        noteDao.countStarredNotes(userId)
+
+    // -----------------------------
+    // Search Notes
+    // -----------------------------
+    suspend fun searchNotes(
+        userId: String,
+        query: String,
+        sortType: String = "default"
+    ): List<Note> {
+        return when (sortType.lowercase()) {
+            "priority" -> noteDao.searchNotesByPriority(userId, query)
+            "date" -> noteDao.searchNotesByDate(userId, query)
+            else -> noteDao.searchNotesDefault(userId, query)
+        }
+    }
+
+    suspend fun searchStarredNotes(
+        userId: String,
+        query: String,
+        sortType: String = "default"
+    ): List<Note> {
+        return when (sortType.lowercase()) {
+            "priority" -> noteDao.searchStarredNotesByPriority(userId, query)
+            "date" -> noteDao.searchStarredNotesByDate(userId, query)
+            else -> noteDao.searchStarredNotesDefault(userId, query)
+        }
     }
 }

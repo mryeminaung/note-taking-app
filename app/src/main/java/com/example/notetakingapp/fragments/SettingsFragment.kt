@@ -1,20 +1,24 @@
 package com.example.notetakingapp.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.notetakingapp.R
+import com.example.notetakingapp.auth.WelcomeActivity
 import com.example.notetakingapp.data.database.NoteDatabase
 import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentSettingsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -30,12 +34,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         val db = NoteDatabase.getDatabase(requireContext())
         repository = NotesRepository(db.noteDao())
+        binding.authEmail.text = FirebaseAuth.getInstance().currentUser?.email
 
         fetchNoteCounts()
 
-        binding.logOutBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_loginActivity)
-        }
+        handleLogOut()
 
         changeTheme()
 
@@ -61,6 +64,41 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 binding.userNameCard to binding.userNameArrow,
                 binding.pwdCard to binding.pwdArrow
             )
+        }
+    }
+
+    private fun handleLogOut() {
+        binding.logOutBtn.setOnClickListener {
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Logout ?")
+                .setMessage("You will have to log in again to see your notes!")
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Logout") { dialog, _ ->
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(requireActivity(), WelcomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                .show()
+
+            val positiveButton =
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setBackgroundColor(
+                ContextCompat.getColor(requireContext(), R.color.deep_blue)
+            )
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            positiveButton.setPadding(40, 20, 40, 20)
+
+            val negativeButton =
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton.setBackgroundColor(
+                ContextCompat.getColor(requireContext(), R.color.sticky_gray)
+            )
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            negativeButton.setPadding(40, 20, 40, 20)
         }
     }
 
@@ -127,9 +165,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun fetchNoteCounts() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
         viewLifecycleOwner.lifecycleScope.launch {
-            val totalNotes = repository.countAllNotes()
-            val starredNotes = repository.countStarredNotes()
+            val totalNotes = repository.countAllNotes(
+                userId = currentUserId
+            )
+            val starredNotes = repository.countStarredNotes(
+                userId = currentUserId
+            )
 
             binding.tvNotesCount.text = totalNotes.toString()
             binding.tvStarredCount.text = starredNotes.toString()

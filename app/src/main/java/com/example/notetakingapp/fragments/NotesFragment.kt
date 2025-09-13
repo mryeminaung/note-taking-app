@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -17,19 +18,32 @@ import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNotesBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class NotesFragment : Fragment(R.layout.fragment_notes) {
 
+    private var currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: NotesAdapter
     private lateinit var repository: NotesRepository
 
+    private var selectedIndex = 0 // default selection
+    private var currentSortType = "default" // current sort type
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentNotesBinding.bind(view)
 
+        currentSortType = loadSortType()
+        selectedIndex = when (currentSortType) {
+            "default" -> 0
+            "priority" -> 1
+            "date" -> 2
+            else -> 0
+        }
+        
         repository = NotesRepository(NoteDatabase.getDatabase(requireContext()).noteDao())
 
         adapter = NotesAdapter(
@@ -47,7 +61,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         binding.notesContainer.adapter = adapter
 
         binding.noteTabs.getTabAt(0)?.select()
-        getAllNotes()
+        getAllNotes(currentSortType)
         sortMenu()
 
         binding.noteSearch.addTextChangedListener { editable ->
@@ -55,16 +69,13 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             if (query.isEmpty()) {
                 refreshCurrentTab()
             } else {
-                searchNotes(query)
+                searchNotes(query, currentSortType)
             }
         }
 
         binding.noteTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                when (tab.position) {
-                    0 -> getAllNotes()
-                    1 -> getStarredNotes()
-                }
+                refreshCurrentTab()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -76,14 +87,22 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         }
     }
 
-    private fun refreshCurrentTab() {
-        when (binding.noteTabs.selectedTabPosition) {
-            0 -> getAllNotes()
-            1 -> getStarredNotes()
-        }
+    private fun saveSortType(sortType: String) {
+        val prefs = requireContext().getSharedPreferences("settings", 0)
+        prefs.edit { putString("sortType", sortType) }
     }
 
-    private var selectedIndex = 0 // default selection
+    private fun loadSortType(): String {
+        val prefs = requireContext().getSharedPreferences("settings", 0)
+        return prefs.getString("sortType", "default") ?: "default"
+    }
+
+    private fun refreshCurrentTab() {
+        when (binding.noteTabs.selectedTabPosition) {
+            0 -> getAllNotes(currentSortType)
+            1 -> getStarredNotes(currentSortType)
+        }
+    }
 
     private fun sortMenu() {
         binding.sortBtn.setOnClickListener {
@@ -95,16 +114,14 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                     selectedIndex = which
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    when (selectedIndex) {
-                        0 -> { /* Sort default */
-                        }
-
-                        1 -> { /* Sort by priority */
-                        }
-
-                        2 -> { /* Sort by date */
-                        }
+                    currentSortType = when (selectedIndex) {
+                        0 -> "default"
+                        1 -> "priority"
+                        2 -> "date"
+                        else -> "default"
                     }
+                    saveSortType(currentSortType)
+                    refreshCurrentTab()
                     dialog.dismiss()
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
@@ -134,35 +151,27 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         }
     }
 
-
-    private fun getAllNotes() {
+    private fun getAllNotes(sortType: String = "default") {
         binding.loadingSpinner.visibility = View.VISIBLE
         binding.notesContainer.visibility = View.GONE
         binding.emptyState.visibility = View.GONE
 
         viewLifecycleOwner.lifecycleScope.launch {
-            val notes = repository.getAllNotes()
+            val notes = repository.getAllNotes(currentUserId, sortType)
             adapter.updateNotes(notes)
             binding.loadingSpinner.visibility = View.GONE
-            if (notes.isEmpty()) {
-                binding.emptyText.visibility = View.GONE
-                binding.emptyState.visibility = View.VISIBLE
-                binding.notesContainer.visibility = View.GONE
-            } else {
-                binding.emptyText.visibility = View.GONE
-                binding.emptyState.visibility = View.GONE
-                binding.notesContainer.visibility = View.VISIBLE
-            }
+            binding.emptyState.visibility = if (notes.isEmpty()) View.VISIBLE else View.GONE
+            binding.notesContainer.visibility = if (notes.isEmpty()) View.GONE else View.VISIBLE
         }
     }
 
-    private fun getStarredNotes() {
+    private fun getStarredNotes(sortType: String = "default") {
         binding.loadingSpinner.visibility = View.VISIBLE
         binding.notesContainer.visibility = View.GONE
         binding.emptyState.visibility = View.GONE
 
         viewLifecycleOwner.lifecycleScope.launch {
-            val notes = repository.getStarredNotes()
+            val notes = repository.getStarredNotes(currentUserId, sortType)
             adapter.updateNotes(notes)
             binding.loadingSpinner.visibility = View.GONE
             if (notes.isEmpty()) {
@@ -178,22 +187,15 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         }
     }
 
-    private fun deleteNote(note: Note) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repository.deleteNote(note)
-            refreshCurrentTab()
-        }
-    }
-
-    private fun searchNotes(query: String) {
+    private fun searchNotes(query: String, sortType: String = "default") {
         binding.loadingSpinner.visibility = View.VISIBLE
         binding.notesContainer.visibility = View.GONE
         binding.emptyState.visibility = View.GONE
 
         viewLifecycleOwner.lifecycleScope.launch {
             val notes = when (binding.noteTabs.selectedTabPosition) {
-                0 -> repository.searchNotes(query)          // All Notes
-                1 -> repository.searchStarredNotes(query)   // Starred Notes
+                0 -> repository.searchNotes(currentUserId, query, sortType)
+                1 -> repository.searchStarredNotes(currentUserId, query, sortType)
                 else -> emptyList()
             }
 
@@ -212,6 +214,13 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 binding.emptyState.visibility = View.GONE
                 binding.notesContainer.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun deleteNote(note: Note) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repository.deleteNote(note)
+            refreshCurrentTab()
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.example.notetakingapp.data.models.Note
 import com.example.notetakingapp.data.repository.NotesRepository
 import com.example.notetakingapp.databinding.FragmentNewNoteBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
@@ -150,16 +152,15 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             }
 
             else -> {
-                // Show priority selection dialog
                 showPriorityDialog { selectedPriority ->
-                    // After selecting priority, insert note
                     lifecycleScope.launch {
                         repository.insertNote(
                             Note(
                                 title = title,
                                 body = body,
                                 bgColor = noteBgColor,
-                                priority = selectedPriority
+                                priority = selectedPriority,
+                                userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
                             )
                         )
                         findNavController().navigate(R.id.action_newNoteFragment_to_notesFragment)
@@ -188,7 +189,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             }
             .show()
 
-        val positiveButton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -198,7 +199,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         positiveButton.setPadding(40, 20, 40, 20)
 
-        val negativeButton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+        val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
         negativeButton.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),

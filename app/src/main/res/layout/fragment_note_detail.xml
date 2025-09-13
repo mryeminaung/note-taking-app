@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:breakStrategy="simple"
         android:scrollHorizontally="false"
-        android:text="ဒီမှာ အရမ်းရှည်ကြီး Note Title မြန်မာစာ ထည့်ထားနိုင်ပါတယ်"
+        android:text="Sample Note Title"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="4dp"
-        android:text="ဒီမှာ အရှည်ကြီး Note Body မြန်မာစာထည့်ထားနိုင်ပါတယ်။ ScrollView ထဲမှာ title နဲ့ body တို့ကို အတူတကွ scroll လုပ်နိုင်မယ်။"
+        android:text="Sample Note Body"
         android:textColor="#333333"
         android:textSize="16sp" />
 

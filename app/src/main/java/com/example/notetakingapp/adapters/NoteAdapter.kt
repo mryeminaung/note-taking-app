@@ -106,7 +106,7 @@ class NotesAdapter(
             }
 
             root.setOnClickListener { onNoteClick(note) }
-            noteDate.text = formatNoteDate(note.createdAt)
+            noteDate.text = formatNoteDate(note.updatedAt)
         }
     }
 

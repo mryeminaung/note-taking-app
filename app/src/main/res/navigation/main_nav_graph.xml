@@ -29,7 +29,7 @@
     tools:layout="@layout/fragment_note_detail">
     <argument
       android:name="noteId"
-      app:argType="integer" />
+      app:argType="string" />
     <action
       android:id="@+id/action_noteDetailFragment_to_editNoteFragment"
       app:destination="@id/editNoteFragment" />
@@ -80,7 +80,7 @@
     tools:layout="@layout/fragment_edit_note">
     <argument
       android:name="noteId"
-      app:argType="integer" />
+      app:argType="string" />
     <action
       android:id="@+id/action_editNoteFragment_to_noteDetailFragment"
       app:destination="@id/noteDetailFragment" />

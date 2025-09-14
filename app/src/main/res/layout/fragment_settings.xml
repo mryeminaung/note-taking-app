@@ -18,7 +18,7 @@
     <View
       android:id="@+id/avatar_bg"
       android:layout_width="match_parent"
-      android:layout_height="300dp"
+      android:layout_height="330dp"
       android:background="@drawable/avatar_bg" />
 
     <!-- Profile Header -->
@@ -26,19 +26,37 @@
       android:id="@+id/profileHeader"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="-220dp"
+      android:layout_marginTop="-240dp"
       android:gravity="center"
       android:orientation="vertical">
 
-      <ImageView
-        android:id="@+id/imgAvatar"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/circle_bg"
-        android:padding="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/account_circle" />
+      <!-- FrameLayout to overlay button on profile image -->
+      <FrameLayout
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+          android:id="@+id/imgAvatar"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@drawable/circle_bg"
+          android:padding="8dp"
+          android:scaleType="centerCrop"
+          android:src="@drawable/account_circle" />
+
+        <ImageButton
+          android:id="@+id/editProfileBtn"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:layout_gravity="bottom|end"
+          android:layout_margin="0dp"
+          android:background="@drawable/circle_bg"
+          android:contentDescription="Edit Profile Picture"
+          android:padding="4dp"
+          android:scaleType="centerInside"
+          android:src="@drawable/ic_edit" />
+      </FrameLayout>
 
       <TextView
         android:id="@+id/authName"
@@ -56,7 +74,9 @@
         android:text="yeminaung.dev@gmail.com"
         android:textColor="@color/white"
         android:textSize="14sp" />
+
     </LinearLayout>
+
 
     <!-- Settings Card -->
     <androidx.cardview.widget.CardView
@@ -76,15 +96,32 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="20dp">
 
-        <TextView
-          android:id="@+id/tvNotesSummary"
-          android:layout_width="wrap_content"
+        <LinearLayout
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="10dp"
-          android:text="Notes Summary"
-          android:textColor="@color/app_text"
-          android:textSize="16sp"
-          android:textStyle="bold" />
+          android:orientation="horizontal">
+
+          <TextView
+            android:id="@+id/tvNotesSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Notes Summary"
+            android:textColor="@color/app_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+          <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+          <ImageView
+            android:id="@+id/syncNotes"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_fluent_document_sync_24_filled" />
+        </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -237,7 +274,7 @@
                 app:hintTextColor="@color/deep_blue">
 
                 <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/usernameEditText"
+                  android:id="@+id/usernameEdit"
                   android:layout_width="match_parent"
                   android:layout_height="50dp"
                   android:inputType="textPersonName"
@@ -245,13 +282,13 @@
               </com.google.android.material.textfield.TextInputLayout>
 
               <com.google.android.material.button.MaterialButton
-                android:id="@+id/usernameUpdateBtn"
+                android:id="@+id/usernameChangeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/deep_blue"
-                android:text="Update"
+                android:text="Change"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 app:cornerRadius="30dp" />
@@ -317,7 +354,7 @@
                 app:hintTextColor="@color/deep_blue">
 
                 <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/oldPasswordEditText"
+                  android:id="@+id/oldPasswordEdit"
                   android:layout_width="match_parent"
                   android:layout_height="50dp"
                   android:inputType="textPassword"
@@ -341,7 +378,7 @@
                 app:hintTextColor="@color/deep_blue">
 
                 <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/newPasswordEditText"
+                  android:id="@+id/newPasswordEdit"
                   android:layout_width="match_parent"
                   android:layout_height="50dp"
                   android:inputType="textPassword"
@@ -349,7 +386,7 @@
               </com.google.android.material.textfield.TextInputLayout>
 
               <com.google.android.material.button.MaterialButton
-                android:id="@+id/changePwdBtn"
+                android:id="@+id/pwdChangeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

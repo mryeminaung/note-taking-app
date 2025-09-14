@@ -43,7 +43,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             "date" -> 2
             else -> 0
         }
-        
+
         repository = NotesRepository(NoteDatabase.getDatabase(requireContext()).noteDao())
 
         adapter = NotesAdapter(
@@ -155,6 +155,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         binding.loadingSpinner.visibility = View.VISIBLE
         binding.notesContainer.visibility = View.GONE
         binding.emptyState.visibility = View.GONE
+        binding.emptyText.visibility = View.GONE
 
         viewLifecycleOwner.lifecycleScope.launch {
             val notes = repository.getAllNotes(currentUserId, sortType)
@@ -164,7 +165,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             binding.notesContainer.visibility = if (notes.isEmpty()) View.GONE else View.VISIBLE
         }
     }
-
+  
     private fun getStarredNotes(sortType: String = "default") {
         binding.loadingSpinner.visibility = View.VISIBLE
         binding.notesContainer.visibility = View.GONE

@@ -10,6 +10,12 @@ import com.example.notetakingapp.data.models.Note
 @Dao
 interface NoteDao {
 
+    @Query("SELECT * FROM notes WHERE userId = :userId AND isSynced = 0")
+    suspend fun getUnsyncedNotes(userId: String): List<Note>
+
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun getNoteById(id: String): Note?
+
     // -----------------------------
     // Normal Notes
     // -----------------------------
@@ -39,13 +45,12 @@ interface NoteDao {
     )
     suspend fun indexByPriority(userId: String): List<Note>
 
-
     // -----------------------------
     // CRUD
     // -----------------------------
 
     @Query("SELECT * FROM notes WHERE id = :id AND userId = :userId")
-    suspend fun show(id: Int, userId: String): Note?
+    suspend fun show(id: String, userId: String): Note?
 
     @Insert
     suspend fun insert(note: Note)
@@ -56,7 +61,6 @@ interface NoteDao {
     @Delete
     suspend fun delete(note: Note)
 
-
     // -----------------------------
     // Counts
     // -----------------------------
@@ -66,7 +70,6 @@ interface NoteDao {
 
     @Query("SELECT COUNT(*) FROM notes WHERE userId = :userId AND starred = 1")
     suspend fun countStarredNotes(userId: String): Int
-
 
     // -----------------------------
     // Starred Notes

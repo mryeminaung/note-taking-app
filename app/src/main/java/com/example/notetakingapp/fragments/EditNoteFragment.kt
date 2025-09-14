@@ -105,7 +105,8 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                                 title = updatedTitle,
                                 body = updatedBody,
                                 bgColor = noteBgColor,
-                                priority = selectedPriority
+                                priority = selectedPriority,
+                                updatedAt = System.currentTimeMillis()
                             )
                             repository.updateNote(updatedNote)
                             findNavController().navigateUp()

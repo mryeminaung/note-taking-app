@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.notetakingapp.MainActivity
 import com.example.notetakingapp.R
 import com.example.notetakingapp.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -22,7 +26,7 @@ class SignUpActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         binding.signUpButton.setOnClickListener {
-            val username = binding.userName.toString().trim()
+            val username = binding.userName.text?.toString()?.trim() ?: "Anonymous"
             val email = binding.userEmail.text.toString().trim()
             val pwd = binding.password.text.toString().trim()
             val pwdConfirm = binding.passwordConfirm.text.toString().trim()
@@ -32,7 +36,6 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-
                 binding.signUpButton.isEnabled = false
                 binding.signUpButton.text = ""
                 binding.signUpButton.icon = null
@@ -46,9 +49,53 @@ class SignUpActivity : AppCompatActivity() {
                         binding.signUpButton.setIconResource(R.drawable.ic_login)
 
                         if (task.isSuccessful) {
-                            Toast.makeText(this, "Signup Successful", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            val user = auth.currentUser
+                            val userId = user?.uid ?: return@addOnCompleteListener
+
+                            val userMap = hashMapOf(
+                                "username" to username,
+                                "email" to email,
+                                "createdAt" to System.currentTimeMillis()
+                            )
+
+                            val firestore = FirebaseFirestore.getInstance()
+
+                            lifecycleScope.launch {
+                                try {
+                                    firestore.collection("users")
+                                        .document(userId)
+                                        .set(userMap)
+                                        .await()
+
+                                    val placeholder = mapOf("placeholder" to true)
+                                    firestore.collection("users")
+                                        .document(userId)
+                                        .collection("notes")
+                                        .document("_placeholder")
+                                        .set(placeholder)
+                                        .await()
+
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        "Signup Successful",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    startActivity(
+                                        Intent(
+                                            this@SignUpActivity,
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                    finish()
+
+                                } catch (e: Exception) {
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        "Failed: ${e.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
                         } else {
                             Toast.makeText(
                                 this,
@@ -57,6 +104,8 @@ class SignUpActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
+
+
             }
         }
 

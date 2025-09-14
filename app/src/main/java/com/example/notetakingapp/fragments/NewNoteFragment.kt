@@ -209,8 +209,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
         negativeButton.setPadding(40, 20, 40, 20)
     }
-
-
+    
     private fun resetNote() {
         binding.noteTitle.setText("")
         binding.noteBody.setText("")

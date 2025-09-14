@@ -4,7 +4,6 @@ import com.example.notetakingapp.data.dao.NoteDao
 import com.example.notetakingapp.data.models.Note
 
 class NotesRepository(private val noteDao: NoteDao) {
-
     // -----------------------------
     // Normal Notes
     // -----------------------------
@@ -16,7 +15,7 @@ class NotesRepository(private val noteDao: NoteDao) {
         }
     }
 
-    suspend fun getNoteById(id: Int, userId: String): Note? =
+    suspend fun getNoteById(id: String, userId: String): Note? =
         noteDao.show(id, userId)
 
     suspend fun insertNote(note: Note) = noteDao.insert(note)

@@ -2,6 +2,7 @@ package com.example.notetakingapp.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -19,7 +20,10 @@ import com.example.notetakingapp.databinding.FragmentNotesBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class NotesFragment : Fragment(R.layout.fragment_notes) {
 
@@ -45,6 +49,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         }
 
         repository = NotesRepository(NoteDatabase.getDatabase(requireContext()).noteDao())
+        val noteDao = NoteDatabase.getDatabase(requireContext()).noteDao()
 
         adapter = NotesAdapter(
             repository = repository,
@@ -165,7 +170,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             binding.notesContainer.visibility = if (notes.isEmpty()) View.GONE else View.VISIBLE
         }
     }
-  
+
     private fun getStarredNotes(sortType: String = "default") {
         binding.loadingSpinner.visibility = View.VISIBLE
         binding.notesContainer.visibility = View.GONE
@@ -222,6 +227,49 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         viewLifecycleOwner.lifecycleScope.launch {
             repository.deleteNote(note)
             refreshCurrentTab()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        deletePendingFromCloud(userId)
+    }
+
+    private fun deletePendingFromCloud(userId: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        val noteDao = NoteDatabase.getDatabase(requireContext()).noteDao()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val snapshot = firestore.collection("users")
+                    .document(userId)
+                    .collection("notes")
+                    .whereEqualTo("pendingDelete", true)
+                    .get()
+                    .await()
+
+                for (doc in snapshot.documents) {
+                    try {
+                        firestore.collection("users")
+                            .document(userId)
+                            .collection("notes")
+                            .document(doc.id)
+                            .delete()
+                            .await()
+                    } catch (e: Exception) {
+                        Log.w("Sync", "Failed to delete ${doc.id} from cloud", e)
+                    }
+                }
+
+                val pendingDeleteNotes = noteDao.getPendingDeleteNotes(userId)
+                for (note in pendingDeleteNotes) {
+                    noteDao.delete(note)
+                }
+
+            } catch (e: Exception) {
+                Log.e("Sync", "Failed to fetch pendingDelete notes from cloud", e)
+            }
         }
     }
 

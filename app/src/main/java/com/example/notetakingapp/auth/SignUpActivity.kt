@@ -2,6 +2,7 @@ package com.example.notetakingapp.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.example.notetakingapp.MainActivity
 import com.example.notetakingapp.R
 import com.example.notetakingapp.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -51,6 +53,17 @@ class SignUpActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             val user = auth.currentUser
                             val userId = user?.uid ?: return@addOnCompleteListener
+
+                            val profileUpdates = userProfileChangeRequest {
+                                displayName = username
+                            }
+
+                            user.updateProfile(profileUpdates)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.d("Profile", "Display name updated")
+                                    }
+                                }
 
                             val userMap = hashMapOf(
                                 "username" to username,

@@ -106,6 +106,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                                 body = updatedBody,
                                 bgColor = noteBgColor,
                                 priority = selectedPriority,
+                                isSynced = false,
                                 updatedAt = System.currentTimeMillis()
                             )
                             repository.updateNote(updatedNote)

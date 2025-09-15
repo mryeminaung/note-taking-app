@@ -16,23 +16,29 @@ interface NoteDao {
     @Query("SELECT * FROM notes WHERE id = :id")
     suspend fun getNoteById(id: String): Note?
 
-    // -----------------------------
-    // Normal Notes
-    // -----------------------------
+    @Query("SELECT * FROM notes WHERE userId = :userId AND pendingDelete = 1")
+    suspend fun getPendingDeleteNotes(userId: String): List<Note>
 
-    // Default (newest first)
-    @Query("SELECT * FROM notes WHERE userId = :userId ORDER BY id DESC")
+    suspend fun deleteNoteOffline(note: Note) {
+        this.update(
+            note.copy(
+                pendingDelete = true,
+                updatedAt = System.currentTimeMillis(),
+                isSynced = false
+            )
+        )
+    }
+
+    @Query("SELECT * FROM notes WHERE userId = :userId AND pendingDelete = 0 ORDER BY id DESC")
     suspend fun indexDefault(userId: String): List<Note>
 
-    // Sort by date (createdAt DESC)
-    @Query("SELECT * FROM notes WHERE userId = :userId ORDER BY createdAt DESC")
+    @Query("SELECT * FROM notes WHERE userId = :userId AND pendingDelete = 0 ORDER BY createdAt DESC")
     suspend fun indexByDate(userId: String): List<Note>
 
-    // Sort by priority (high → medium → low, newest first)
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId 
+        WHERE userId = :userId AND pendingDelete = 0
         ORDER BY 
             CASE priority 
                 WHEN 'high' THEN 3
@@ -45,11 +51,7 @@ interface NoteDao {
     )
     suspend fun indexByPriority(userId: String): List<Note>
 
-    // -----------------------------
-    // CRUD
-    // -----------------------------
-
-    @Query("SELECT * FROM notes WHERE id = :id AND userId = :userId")
+    @Query("SELECT * FROM notes WHERE id = :id AND userId = :userId AND pendingDelete = 0")
     suspend fun show(id: String, userId: String): Note?
 
     @Insert
@@ -61,33 +63,22 @@ interface NoteDao {
     @Delete
     suspend fun delete(note: Note)
 
-    // -----------------------------
-    // Counts
-    // -----------------------------
-
-    @Query("SELECT COUNT(*) FROM notes WHERE userId = :userId")
+    @Query("SELECT COUNT(*) FROM notes WHERE userId = :userId AND pendingDelete = 0")
     suspend fun countAllNotes(userId: String): Int
 
-    @Query("SELECT COUNT(*) FROM notes WHERE userId = :userId AND starred = 1")
+    @Query("SELECT COUNT(*) FROM notes WHERE userId = :userId AND starred = 1 AND pendingDelete = 0")
     suspend fun countStarredNotes(userId: String): Int
 
-    // -----------------------------
-    // Starred Notes
-    // -----------------------------
-
-    // Default (newest first)
-    @Query("SELECT * FROM notes WHERE userId = :userId AND starred = 1 ORDER BY id DESC")
+    @Query("SELECT * FROM notes WHERE userId = :userId AND starred = 1 AND pendingDelete = 0 ORDER BY id DESC")
     suspend fun getStarredNotesDefault(userId: String): List<Note>
 
-    // Sort by date
-    @Query("SELECT * FROM notes WHERE userId = :userId AND starred = 1 ORDER BY createdAt DESC")
+    @Query("SELECT * FROM notes WHERE userId = :userId AND starred = 1 AND pendingDelete = 0 ORDER BY createdAt DESC")
     suspend fun getStarredNotesByDate(userId: String): List<Note>
 
-    // Sort by priority
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId AND starred = 1
+        WHERE userId = :userId AND starred = 1 AND pendingDelete = 0
         ORDER BY 
             CASE priority 
                 WHEN 'high' THEN 3
@@ -100,38 +91,30 @@ interface NoteDao {
     )
     suspend fun getStarredNotesByPriority(userId: String): List<Note>
 
-
-    // -----------------------------
-    // Search Notes
-    // -----------------------------
-
-    // Default search
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId 
+        WHERE userId = :userId AND pendingDelete = 0
         AND (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%')
         ORDER BY id DESC
     """
     )
     suspend fun searchNotesDefault(userId: String, query: String): List<Note>
 
-    // Search by date
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId 
+        WHERE userId = :userId AND pendingDelete = 0
         AND (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%')
         ORDER BY createdAt DESC
     """
     )
     suspend fun searchNotesByDate(userId: String, query: String): List<Note>
 
-    // Search by priority
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId 
+        WHERE userId = :userId AND pendingDelete = 0
         AND (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%')
         ORDER BY 
             CASE priority 
@@ -145,38 +128,30 @@ interface NoteDao {
     )
     suspend fun searchNotesByPriority(userId: String, query: String): List<Note>
 
-
-    // -----------------------------
-    // Search Starred Notes
-    // -----------------------------
-
-    // Default
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId AND starred = 1
+        WHERE userId = :userId AND starred = 1 AND pendingDelete = 0
         AND (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%')
         ORDER BY id DESC
     """
     )
     suspend fun searchStarredNotesDefault(userId: String, query: String): List<Note>
 
-    // By date
     @Query(
         """
         SELECT * FROM notes 
-        WHERE userId = :userId AND starred = 1
+        WHERE userId = :userId AND starred = 1 AND pendingDelete = 0
         AND (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%')
         ORDER BY createdAt DESC
     """
     )
     suspend fun searchStarredNotesByDate(userId: String, query: String): List<Note>
 
-    // By priority
     @Query(
         """
-        SELECT * FROM notes 
-        WHERE userId = :userId AND starred = 1
+        SELECT * FROM notes
+        WHERE userId = :userId AND starred = 1 AND pendingDelete = 0
         AND (title LIKE '%' || :query || '%' OR body LIKE '%' || :query || '%')
         ORDER BY 
             CASE priority 

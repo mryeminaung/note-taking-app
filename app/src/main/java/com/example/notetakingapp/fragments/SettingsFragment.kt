@@ -25,9 +25,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
+import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
@@ -47,7 +50,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         handleLogOut()
         changeTheme()
 
-        binding.syncNotes.setOnClickListener { syncNotesToCloud() }
+        binding.syncNotes.setOnClickListener { syncNotes() }
 
         binding.editProfileBtn.setOnClickListener {
             Log.d("Profile:", "Image Uploading...")
@@ -99,10 +102,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    val username = document.getString("username") ?: "Anonymous"
-                    val email = document.getString("email") ?: auth.currentUser?.email ?: ""
+                    val user = auth.currentUser
 
-                    binding.authName.text = username
+                    val displayName = user?.displayName ?: "User"
+                    val email = user?.email ?: ""
+
+                    binding.authName.text = displayName
                     binding.authEmail.text = email
                 }
             }
@@ -116,9 +121,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun changeUsername(newUsername: String) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
 
-        if (userId.isNullOrBlank()) {
+        if (user == null || userId.isNullOrBlank()) {
             Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
             return
         }
@@ -128,32 +134,41 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             return
         }
 
-        val firestore = FirebaseFirestore.getInstance()
-
-        lifecycleScope.launch {
-            try {
-                firestore.collection("users")
-                    .document(userId)
-                    .update("username", newUsername)
-                    .await()
-
-                Toast.makeText(
-                    requireContext(),
-                    "Username updated successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                binding.authName.text = newUsername
-                binding.usernameEdit.text?.clear()
-
-            } catch (e: Exception) {
-                Toast.makeText(
-                    requireContext(),
-                    "Failed to update: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        val profileUpdates = userProfileChangeRequest {
+            displayName = newUsername
         }
+
+        user.updateProfile(profileUpdates)
+            .addOnCompleteListener { taskAuth ->
+                if (taskAuth.isSuccessful) {
+                    val firestore = FirebaseFirestore.getInstance()
+                    firestore.collection("users")
+                        .document(userId)
+                        .update("username", newUsername)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                requireContext(),
+                                "Username updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.authName.text = newUsername
+                            binding.usernameEdit.text?.clear()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to update Firestore: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to update Auth name: ${taskAuth.exception?.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 
     private fun changePassword(currentPassword: String, newPassword: String) {
@@ -228,54 +243,72 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun syncNotesToCloud() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId == null) {
-            Toast.makeText(requireContext(), "You must be logged in to sync", Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
+    private fun syncNotes() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val noteDao = NoteDatabase.getDatabase(requireContext()).noteDao()
                 val firestore = FirebaseFirestore.getInstance()
 
-                // 1. Push unsynced notes
-                val unsyncedNotes =
-                    noteDao.getUnsyncedNotes(userId)
-                for (note in unsyncedNotes) {
+                val localUnsynced = noteDao.getUnsyncedNotes(userId)
+                for (localNote in localUnsynced) {
+                    val uploadMap = hashMapOf(
+                        "id" to localNote.id,
+                        "title" to localNote.title,
+                        "body" to localNote.body,
+                        "priority" to localNote.priority,
+                        "bgColor" to localNote.bgColor,
+                        "starred" to localNote.starred,
+                        "updatedAt" to localNote.updatedAt,
+                        "createdAt" to localNote.createdAt,
+                        "isSynced" to true,
+                        "pendingDelete" to localNote.pendingDelete,
+                        "userId" to userId
+                    )
+
                     firestore.collection("users")
                         .document(userId)
                         .collection("notes")
-                        .document(note.id)
-                        .set(note)
+                        .document(localNote.id)
+                        .set(uploadMap)
                         .await()
 
-                    noteDao.update(note.copy(isSynced = true))
+                    noteDao.update(localNote.copy(isSynced = true))
                 }
 
-                // 2. Pull remote notes
                 val snapshot = firestore.collection("users")
                     .document(userId)
                     .collection("notes")
                     .get()
                     .await()
 
-                for (doc in snapshot.documents) {
-                    val remoteNote = doc.toObject(Note::class.java) ?: continue
-                    val localNote = noteDao.getNoteById(remoteNote.id)
-
-                    if (localNote == null || remoteNote.updatedAt > localNote.updatedAt) {
-                        noteDao.insert(remoteNote.copy(isSynced = true))
+                val remoteNotes = snapshot.documents.mapNotNull { doc ->
+                    try {
+                        doc.toObject(Note::class.java)?.copy(id = doc.id)
+                    } catch (e: Exception) {
+                        null
                     }
                 }
 
-                Toast.makeText(requireContext(), "Sync complete ✅", Toast.LENGTH_SHORT).show()
+                for (remoteNote in remoteNotes) {
+                    val localNote = noteDao.getNoteById(remoteNote.id)
+                    if (localNote == null) {
+                        noteDao.insert(remoteNote.copy(isSynced = true))
+                    } else if (remoteNote.updatedAt > localNote.updatedAt) {
+                        noteDao.update(remoteNote.copy(isSynced = true))
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Two-way sync complete ✅", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
             } catch (e: Exception) {
-                Log.e("Sync", "Error syncing notes", e)
-                Toast.makeText(requireContext(), "Sync failed ❌", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Sync failed ❌", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
